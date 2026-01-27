@@ -1,7 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  basePath: '/docs-viewer',
+  assetPrefix: '/docs-viewer',
+  output: 'standalone',
 };
 
 export default nextConfig;
