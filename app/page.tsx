@@ -23,7 +23,7 @@ type ProjectDocs = Record<string, DocFile[]>;
 const PROJECT_NAMES: Record<string, string> = {
   'wish-x': 'Wish-X',
   'wish-backend-x': 'Wish Backend X',
-  'as-you-wish-multi-agent': 'As You Wish Multi-Agent',
+  'doc-automation-hub': 'Documentation Automation Hub',
   'claude-agent-server': 'Claude Agent Server',
 };
 

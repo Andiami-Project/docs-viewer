@@ -13,7 +13,7 @@ interface DocFile {
 const PROJECT_ROOTS = {
   'wish-x': '/home/ubuntu/workspace/wish-x',
   'wish-backend-x': '/home/ubuntu/workspace/wish-backend-x',
-  'as-you-wish-multi-agent': '/home/ubuntu/workspace/as-you-wish-multi-agent',
+  'doc-automation-hub': '/home/ubuntu/workspace/doc-automation-hub',
   'claude-agent-server': '/home/ubuntu/workspace/claude-agent-server',
 };
 
