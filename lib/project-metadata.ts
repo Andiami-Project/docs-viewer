@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { parseMarkdownStructure, extractReadmePreview } from './markdown-parser';
 
 // Map project names to their actual root directories
 const PROJECT_ROOTS: Record<string, string> = {
@@ -36,6 +37,11 @@ export interface ProjectMetadata {
     components: number;
   };
   readmePreview: string;
+  readmeStructure?: {
+    headings: Array<{ level: number; text: string; id: string }>;
+    sections: Array<{ title: string; content: string }>;
+    installCommands: string[];
+  };
   keyDocs: Array<{
     title: string;
     path: string;
@@ -91,12 +97,21 @@ export async function getProjectMetadata(projectName: string): Promise<ProjectMe
     // Detect key documentation files
     const keyDocs = detectKeyDocs(files, projectRoot);
 
-    // Get README preview (first 300 chars)
+    // Get README preview and structure
     const readmePath = path.join(projectRoot, 'README.md');
     let readmePreview = '';
+    let readmeStructure;
+
     if (fs.existsSync(readmePath)) {
       const readme = fs.readFileSync(readmePath, 'utf-8');
-      readmePreview = readme.substring(0, 300).trim();
+      readmePreview = extractReadmePreview(readme);
+
+      const parsed = parseMarkdownStructure(readme);
+      readmeStructure = {
+        headings: parsed.headings,
+        sections: parsed.sections,
+        installCommands: parsed.installCommands,
+      };
     }
 
     return {
@@ -110,6 +125,7 @@ export async function getProjectMetadata(projectName: string): Promise<ProjectMe
         components: keyDocs.filter(d => d.type === 'api' || d.type === 'config').length,
       },
       readmePreview,
+      readmeStructure,
       keyDocs,
     };
   } catch (error) {
