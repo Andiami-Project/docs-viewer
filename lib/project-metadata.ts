@@ -1,6 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 
+// Map project names to their actual root directories
+const PROJECT_ROOTS: Record<string, string> = {
+  'workspace-docs': '/home/ubuntu/workspace/.docs-viewer-data/workspace-docs',
+  'wish-x': '/home/ubuntu/workspace/wish-x',
+  'wish-backend-x': '/home/ubuntu/workspace/wish-backend-x',
+  'doc-automation-hub': '/home/ubuntu/workspace/doc-automation-hub',
+  'claude-agent-server': '/home/ubuntu/workspace/claude-agent-server',
+};
+
 export interface ProjectMetadata {
   name: string;
   displayName: string;
@@ -21,62 +30,52 @@ export interface ProjectMetadata {
 
 export async function getProjectMetadata(projectName: string): Promise<ProjectMetadata | null> {
   try {
-    // Path to documentation data
-    const docsPath = path.join(process.cwd(), '.docs-viewer-data', projectName);
+    // Get actual project root path
+    const projectRoot = PROJECT_ROOTS[projectName];
 
-    if (!fs.existsSync(docsPath)) {
+    if (!projectRoot || !fs.existsSync(projectRoot)) {
       return null;
     }
 
-    // Read projects data to get display info
-    const projectsFile = path.join(process.cwd(), '.docs-viewer-data', 'projects.json');
+    // Fetch project basic info from API
+    const response = await fetch('http://localhost:3000/docs-viewer/api/projects');
+    const data = await response.json();
+
+    // Find project in the data structure
     let project = null;
-
-    if (fs.existsSync(projectsFile)) {
-      const projectsData = JSON.parse(fs.readFileSync(projectsFile, 'utf-8'));
-
-      // Find project in the data structure
-      if (Array.isArray(projectsData)) {
-        project = projectsData.find((p: any) => p.name === projectName);
-      } else {
-        // Check each category
-        for (const category of Object.values(projectsData)) {
-          const found = (category as any).projects?.find((p: any) => p.name === projectName);
-          if (found) {
-            project = found;
-            break;
-          }
+    if (Array.isArray(data)) {
+      project = data.find((p: any) => p.name === projectName);
+    } else {
+      for (const category of Object.values(data)) {
+        const found = (category as any).projects?.find((p: any) => p.name === projectName);
+        if (found) {
+          project = found;
+          break;
         }
       }
     }
 
     if (!project) {
-      // Fallback to basic info if not found in projects.json
-      project = {
-        name: projectName,
-        displayName: projectName,
-        description: '',
-        category: 'uncategorized'
-      };
+      return null;
     }
 
     // Count markdown files
-    const files = getAllMarkdownFiles(docsPath);
+    const files = getAllMarkdownFiles(projectRoot);
     const totalDocs = files.length;
 
     // Get last modified time
-    const stats = fs.statSync(docsPath);
+    const stats = fs.statSync(projectRoot);
     const lastUpdated = stats.mtime.toISOString().split('T')[0];
 
     // Detect key documentation files
-    const keyDocs = detectKeyDocs(files, docsPath);
+    const keyDocs = detectKeyDocs(files, projectRoot);
 
     // Get README preview (first 300 chars)
-    const readmePath = path.join(docsPath, 'README.md');
+    const readmePath = path.join(projectRoot, 'README.md');
     let readmePreview = '';
     if (fs.existsSync(readmePath)) {
       const readme = fs.readFileSync(readmePath, 'utf-8');
-      readmePreview = readme.substring(0, 300);
+      readmePreview = readme.substring(0, 300).trim();
     }
 
     return {
@@ -102,16 +101,26 @@ function getAllMarkdownFiles(dir: string): string[] {
   const files: string[] = [];
 
   function traverse(currentPath: string) {
-    const entries = fs.readdirSync(currentPath, { withFileTypes: true });
+    try {
+      const entries = fs.readdirSync(currentPath, { withFileTypes: true });
 
-    for (const entry of entries) {
-      const fullPath = path.join(currentPath, entry.name);
+      for (const entry of entries) {
+        // Skip node_modules, .git, and other build directories
+        if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.next' || entry.name === 'dist') {
+          continue;
+        }
 
-      if (entry.isDirectory()) {
-        traverse(fullPath);
-      } else if (entry.isFile() && entry.name.endsWith('.md')) {
-        files.push(fullPath);
+        const fullPath = path.join(currentPath, entry.name);
+
+        if (entry.isDirectory()) {
+          traverse(fullPath);
+        } else if (entry.isFile() && entry.name.endsWith('.md')) {
+          files.push(fullPath);
+        }
       }
+    } catch (err) {
+      // Skip directories we don't have permission to read
+      console.error(`Error reading directory ${currentPath}:`, err);
     }
   }
 
@@ -137,7 +146,7 @@ function detectKeyDocs(files: string[], basePath: string): ProjectMetadata['keyD
       type = 'example';
     }
 
-    // Only include top 5 key docs (README, API, Config, Getting Started, Examples)
+    // Only include top key docs
     if (
       lowerName === 'readme' ||
       lowerName === 'api' ||
@@ -153,5 +162,5 @@ function detectKeyDocs(files: string[], basePath: string): ProjectMetadata['keyD
     }
   }
 
-  return keyDocs.slice(0, 5); // Top 5 key docs
+  return keyDocs.slice(0, 5);
 }
