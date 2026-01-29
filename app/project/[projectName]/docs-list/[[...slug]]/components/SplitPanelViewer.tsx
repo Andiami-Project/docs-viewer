@@ -134,7 +134,7 @@ export function SplitPanelViewer({ project, docs, selectedDoc, selectedContent }
                           <span className="truncate">{doc.filename}</span>
                         </div>
                         {doc.description && (
-                          <p className="text-xs text-slate-500 dark:text-gray-500 mt-1 truncate">
+                          <p className="text-xs text-slate-500 dark:text-gray-400 mt-1 truncate">
                             {doc.description.substring(0, 50)}...
                           </p>
                         )}
@@ -150,7 +150,7 @@ export function SplitPanelViewer({ project, docs, selectedDoc, selectedContent }
         {/* Right panel - Document viewer */}
         <main className="flex-1 overflow-y-auto bg-white dark:bg-gray-900">
           {selectedContent ? (
-            <article className="max-w-4xl mx-auto p-8 prose prose-slate dark:prose-invert prose-headings:text-slate-900 dark:prose-headings:text-gray-100 prose-p:text-slate-700 dark:prose-p:text-gray-300 prose-strong:text-slate-900 dark:prose-strong:text-gray-100 prose-code:text-slate-800 dark:prose-code:text-gray-200 prose-li:text-slate-700 dark:prose-li:text-gray-300">
+            <article className="max-w-4xl mx-auto p-8 prose prose-slate dark:prose-invert prose-headings:text-slate-900 dark:prose-headings:text-gray-50 prose-p:text-slate-700 dark:prose-p:text-gray-200 prose-strong:text-slate-900 dark:prose-strong:text-gray-50 prose-code:text-slate-800 dark:prose-code:text-gray-100 prose-li:text-slate-700 dark:prose-li:text-gray-200 prose-a:text-blue-600 dark:prose-a:text-blue-400">
               <ReactMarkdown
                 rehypePlugins={[
                   rehypeHighlight,
@@ -167,8 +167,8 @@ export function SplitPanelViewer({ project, docs, selectedDoc, selectedContent }
                 <svg className="w-16 h-16 mx-auto text-slate-300 dark:text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                <p className="text-slate-500 dark:text-gray-400 font-medium">Select a document to view</p>
-                <p className="text-sm text-slate-400 dark:text-gray-500 mt-1">Choose a file from the sidebar</p>
+                <p className="text-slate-500 dark:text-gray-300 font-medium">Select a document to view</p>
+                <p className="text-sm text-slate-400 dark:text-gray-400 mt-1">Choose a file from the sidebar</p>
               </div>
             </div>
           )}
