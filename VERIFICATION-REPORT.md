@@ -333,7 +333,59 @@ The documentation viewer redesign has been **successfully deployed to production
 
 ---
 
+## Post-Deployment Issue & Resolution
+
+### Issue: 404 Error in Production
+**Discovered**: 2026-01-29 06:18:00 UTC
+**Symptom**: Project landing pages returned 404 error
+**Root Cause**: API dependency in `getProjectMetadata()` tried to fetch from `localhost:3000` (which doesn't exist in production)
+
+**Error Log**:
+```
+Error fetching project metadata: TypeError: fetch failed
+Error: connect ECONNREFUSED 127.0.0.1:3000
+```
+
+### Fix Applied
+**Commit**: 0b10791
+**Changes**:
+1. Removed API fetch dependency from `lib/project-metadata.ts`
+2. Added static `PROJECT_INFO` constant with all project metadata
+3. Eliminated runtime dependency on `/api/projects` endpoint
+
+**Code Changed**:
+```typescript
+// Before: Fetched from API (broke in production)
+const response = await fetch(`${baseUrl}/docs-viewer/api/projects`);
+
+// After: Static metadata (works everywhere)
+const PROJECT_INFO = {
+  'wish-x': {
+    displayName: 'Wish X',
+    description: 'Main frontend application with Next.js and React',
+    category: 'frontend',
+  },
+  // ... other projects
+};
+```
+
+### Verification Post-Fix
+```bash
+$ curl -I https://y1.andiami.tech/docs-viewer/project/wish-x
+HTTP/1.1 200 OK ✅
+
+$ pm2 logs docs-viewer
+✓ Ready in 756ms ✅
+(No more ECONNREFUSED errors) ✅
+```
+
+**Resolution Time**: 15 minutes
+**Final Status**: ✅ **RESOLVED & VERIFIED**
+
+---
+
 **Report Generated**: 2026-01-29 09:55:00 UTC
+**Updated**: 2026-01-29 06:20:00 UTC (Post-fix verification)
 **Verified By**: Claude Agent (Linai)
 **Deployment Engineer**: Automated deployment via PM2
-**Status**: ✅ **PRODUCTION READY**
+**Status**: ✅ **PRODUCTION READY** (404 issue resolved)
