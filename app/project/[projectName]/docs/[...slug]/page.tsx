@@ -41,27 +41,34 @@ export default async function DocPage({
     <div className="min-h-dvh bg-slate-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Breadcrumb */}
-        <nav className="mb-4 md:mb-6 text-xs md:text-sm text-gray-600 dark:text-gray-400" aria-label="Breadcrumb">
-          <a href="/" className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">
+        <nav className="mb-4 md:mb-6 text-sm md:text-base text-slate-800 dark:text-gray-300" aria-label="Breadcrumb">
+          <a href="/" className="inline-flex items-center py-2 px-2 -ml-2 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded transition-colors">
             Home
           </a>
-          {' / '}
+          <span aria-hidden="true" className="mx-1 text-slate-400">/</span>
           <a
             href={`/project/${projectName}`}
-            className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
+            className="inline-flex items-center py-2 px-2 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-slate-100 dark:hover:bg-gray-700 rounded transition-colors"
           >
             {project.displayName}
           </a>
-          {' / '}
-          <span className="text-gray-900 dark:text-gray-100 font-medium">
+          <span aria-hidden="true" className="mx-1 text-slate-400">/</span>
+          <span className="text-slate-900 dark:text-gray-100 font-medium py-2">
             {slug[slug.length - 1].replace('.md', '').replace(/-/g, ' ')}
           </span>
         </nav>
 
-        {/* Two-column layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-6 lg:gap-8">
+        {/* Two-column layout - TOC on LEFT */}
+        <div className="grid grid-cols-1 lg:grid-cols-[250px_1fr] gap-6 lg:gap-8">
+          {/* Table of Contents sidebar - LEFT SIDE */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-4 max-h-[calc(100vh-2rem)] overflow-y-auto">
+              <TableOfContents headings={parsed.headings} />
+            </div>
+          </aside>
+
           {/* Main content */}
-          <article className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 border border-slate-200 dark:border-gray-700 prose prose-sm md:prose-base prose-slate dark:prose-invert max-w-none">
+          <article className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 border border-slate-200 dark:border-gray-700 prose prose-sm md:prose-base prose-slate dark:prose-invert max-w-4xl">
             <ReactMarkdown
               rehypePlugins={[
                 rehypeHighlight,
@@ -72,11 +79,6 @@ export default async function DocPage({
               {markdown}
             </ReactMarkdown>
           </article>
-
-          {/* Table of Contents sidebar */}
-          <aside className="hidden lg:block">
-            <TableOfContents headings={parsed.headings} />
-          </aside>
         </div>
       </div>
     </div>
