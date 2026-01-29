@@ -1,0 +1,52 @@
+{
+  "claude-agent-server": {
+    "name": "claude-agent-server",
+    "displayName": "Claude Agent Server",
+    "description": "Claude Agent Server - Workspace Configuration",
+    "category": "workspace",
+    "path": "/home/ubuntu/workspace/claude-agent-server",
+    "icon": "Folder",
+    "tags": [],
+    "autoDetected": true
+  },
+  "doc-automation-hub": {
+    "name": "doc-automation-hub",
+    "displayName": "Doc Automation Hub",
+    "description": "Doc Automation Hub - Documentation",
+    "category": "documentation",
+    "path": "/home/ubuntu/workspace/doc-automation-hub",
+    "icon": "BookOpen",
+    "tags": [],
+    "autoDetected": true
+  },
+  "wish-backend-x": {
+    "name": "wish-backend-x",
+    "displayName": "Wish Backend X",
+    "description": "Wish Backend X - Backend Services",
+    "category": "backend",
+    "path": "/home/ubuntu/workspace/wish-backend-x",
+    "icon": "Server",
+    "tags": [],
+    "autoDetected": true
+  },
+  "workspace-docs": {
+    "name": "workspace-docs",
+    "displayName": "Workspace Docs",
+    "description": "Workspace Docs - Documentation",
+    "category": "documentation",
+    "path": "/home/ubuntu/workspace/.claude",
+    "icon": "BookOpen",
+    "tags": [],
+    "autoDetected": true
+  },
+  "wish-x": {
+    "name": "wish-x",
+    "displayName": "Wish X",
+    "description": "Wish X - Workspace Configuration",
+    "category": "workspace",
+    "path": "/home/ubuntu/workspace/wish-x",
+    "icon": "Folder",
+    "tags": [],
+    "autoDetected": true
+  }
+}

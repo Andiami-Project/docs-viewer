@@ -1,423 +1,245 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FileText, Folder, ChevronRight, ChevronDown, Search, Menu, X, Sun, Moon, Copy, Check } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import Link from 'next/link';
+import { Search, FileText, Server, Settings, Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import 'highlight.js/styles/github-dark.css';
 
-interface DocFile {
+interface Project {
   name: string;
-  path: string;
-  relativePath: string;
-  type: 'file' | 'directory';
-  children?: DocFile[];
+  displayName: string;
+  description: string;
+  category: string;
 }
 
-type ProjectDocs = Record<string, DocFile[]>;
-
-const PROJECT_NAMES: Record<string, string> = {
-  'wish-x': 'Wish-X',
-  'wish-backend-x': 'Wish Backend X',
-  'doc-automation-hub': 'Documentation Automation Hub',
-  'claude-agent-server': 'Claude Agent Server',
-};
-
-function FileTreeItem({
-  item,
-  project,
-  onSelect,
-  selectedFile,
-  darkMode,
-}: {
-  item: DocFile;
-  project: string;
-  onSelect: (project: string, file: string) => void;
-  selectedFile: string | null;
-  darkMode: boolean;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-  const isSelected = selectedFile === `${project}:${item.relativePath}`;
-
-  if (item.type === 'file') {
-    return (
-      <div
-        className={cn(
-          'flex items-center gap-2 px-3 py-2 text-sm cursor-pointer rounded-md transition-colors',
-          isSelected
-            ? darkMode
-              ? 'bg-blue-900/50 text-blue-300'
-              : 'bg-blue-100 text-blue-900'
-            : darkMode
-              ? 'hover:bg-gray-700 text-gray-300'
-              : 'hover:bg-gray-100 text-gray-700'
-        )}
-        onClick={() => onSelect(project, item.relativePath)}
-      >
-        <FileText className="w-4 h-4 flex-shrink-0" />
-        <span className="truncate">{item.name}</span>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      <div
-        className={cn(
-          "flex items-center gap-2 px-3 py-2 text-sm cursor-pointer rounded-md transition-colors",
-          darkMode ? "hover:bg-gray-700 text-gray-300" : "hover:bg-gray-100 text-gray-700"
-        )}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? (
-          <ChevronDown className="w-4 h-4 flex-shrink-0" />
-        ) : (
-          <ChevronRight className="w-4 h-4 flex-shrink-0" />
-        )}
-        <Folder className="w-4 h-4 flex-shrink-0" />
-        <span className="truncate">{item.name}</span>
-      </div>
-      {isOpen && item.children && (
-        <div className="ml-4">
-          {item.children.map((child, idx) => (
-            <FileTreeItem
-              key={idx}
-              item={child}
-              project={project}
-              onSelect={onSelect}
-              selectedFile={selectedFile}
-              darkMode={darkMode}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
+interface ProjectCategory {
+  definition: {
+    name: string;
+    displayName: string;
+    description: string;
+    icon: string;
+  };
+  projects: Project[];
 }
 
-function ProjectSection({
-  project,
-  files,
-  onSelect,
-  selectedFile,
-  darkMode,
-}: {
-  project: string;
-  files: DocFile[];
-  onSelect: (project: string, file: string) => void;
-  selectedFile: string | null;
-  darkMode: boolean;
-}) {
-  const [isOpen, setIsOpen] = useState(true);
-
-  return (
-    <div className="mb-6">
-      <div
-        className={cn(
-          "flex items-center gap-2 px-3 py-2 font-semibold cursor-pointer rounded-md",
-          darkMode
-            ? "text-gray-100 hover:bg-gray-700"
-            : "text-gray-900 hover:bg-gray-50"
-        )}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? (
-          <ChevronDown className="w-5 h-5" />
-        ) : (
-          <ChevronRight className="w-5 h-5" />
-        )}
-        <span>{PROJECT_NAMES[project] || project}</span>
-      </div>
-      {isOpen && (
-        <div className="mt-2 ml-4">
-          {files.map((file, idx) => (
-            <FileTreeItem
-              key={idx}
-              item={file}
-              project={project}
-              onSelect={onSelect}
-              selectedFile={selectedFile}
-              darkMode={darkMode}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function Home() {
-  const [docs, setDocs] = useState<ProjectDocs | null>(null);
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
-  const [fileContent, setFileContent] = useState<string>('');
+export default function HomePage() {
+  const [projects, setProjects] = useState<Record<string, ProjectCategory>>({});
   const [loading, setLoading] = useState(true);
-  const [contentLoading, setContentLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchDocs();
-
-    // Restore selectedFile and fileContent from sessionStorage on mount
-    const savedFile = sessionStorage.getItem('selectedFile');
-    const savedContent = sessionStorage.getItem('fileContent');
-
-    if (savedFile && savedContent) {
-      setSelectedFile(savedFile);
-      setFileContent(savedContent);
-    }
+    fetchProjects();
   }, []);
 
-  async function fetchDocs() {
+  async function fetchProjects() {
     try {
       setLoading(true);
-      const response = await fetch('/docs-viewer/api/docs');
+      const response = await fetch('/docs-viewer/api/projects?action=by-category');
       const data = await response.json();
-      setDocs(data);
+      setProjects(data);
     } catch (error) {
-      console.error('Error fetching docs:', error);
+      console.error('Error fetching projects:', error);
     } finally {
       setLoading(false);
     }
   }
 
-  async function handleSelectFile(project: string, file: string) {
-    try {
-      setContentLoading(true);
-      const fileKey = `${project}:${file}`;
-      setSelectedFile(fileKey);
-      const response = await fetch(
-        `/docs-viewer/api/content?project=${project}&file=${encodeURIComponent(file)}`
-      );
-      const data = await response.json();
-      const content = data.content || '';
-      setFileContent(content);
-
-      // Persist to sessionStorage to survive page reloads
-      sessionStorage.setItem('selectedFile', fileKey);
-      sessionStorage.setItem('fileContent', content);
-    } catch (error) {
-      console.error('Error fetching file content:', error);
-      setFileContent('Error loading file content');
-    } finally {
-      setContentLoading(false);
+  const getCategoryIcon = (iconName: string) => {
+    switch (iconName) {
+      case 'FileText':
+        return FileText;
+      case 'Server':
+        return Server;
+      case 'Settings':
+        return Settings;
+      default:
+        return FileText;
     }
-  }
-
-  const filteredDocs = docs
-    ? Object.entries(docs).reduce((acc, [project, files]) => {
-        if (searchQuery) {
-          const filtered = filterFilesBySearch(files, searchQuery.toLowerCase());
-          if (filtered.length > 0) {
-            acc[project] = filtered;
-          }
-        } else {
-          acc[project] = files;
-        }
-        return acc;
-      }, {} as ProjectDocs)
-    : {};
-
-  function filterFilesBySearch(files: DocFile[], query: string): DocFile[] {
-    return files
-      .map((file) => {
-        if (file.type === 'file') {
-          return file.name.toLowerCase().includes(query) ? file : null;
-        } else {
-          const filteredChildren = file.children
-            ? filterFilesBySearch(file.children, query)
-            : [];
-          if (filteredChildren.length > 0) {
-            return { ...file, children: filteredChildren };
-          }
-          return file.name.toLowerCase().includes(query) ? file : null;
-        }
-      })
-      .filter(Boolean) as DocFile[];
-  }
-
-  const copyToClipboard = async (text: string, id: string) => {
-    await navigator.clipboard.writeText(text);
-    setCopiedCode(id);
-    setTimeout(() => setCopiedCode(null), 2000);
   };
 
-  return (
-    <div className={cn("flex h-screen", darkMode ? "bg-gray-900" : "bg-gray-50")}>
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          'border-r transition-all duration-300',
-          darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200',
-          sidebarOpen ? 'w-80' : 'w-0',
-          'overflow-hidden'
-        )}
-      >
-        <div className="h-full flex flex-col">
-          {/* Header */}
-          <div className={cn("p-4 border-b", darkMode ? "border-gray-700" : "border-gray-200")}>
-            <div className="flex items-center justify-between mb-4">
-              <h1 className={cn("text-xl font-bold", darkMode ? "text-gray-100" : "text-gray-900")}>Documentation</h1>
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className={cn("lg:hidden p-1 rounded", darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100")}
-              >
-                <X className={cn("w-5 h-5", darkMode ? "text-gray-300" : "")} />
-              </button>
-            </div>
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search files..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={cn(
-                  "w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent placeholder:text-gray-400",
-                  darkMode
-                    ? "bg-gray-700 border-gray-600 text-gray-100"
-                    : "bg-white border-gray-300 text-gray-900"
-                )}
-              />
-            </div>
-          </div>
+  const filteredProjects = Object.entries(projects).reduce((acc, [categoryName, category]) => {
+    if (searchQuery) {
+      const filtered = category.projects.filter(p =>
+        p.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      if (filtered.length > 0) {
+        acc[categoryName] = { ...category, projects: filtered };
+      }
+    } else {
+      acc[categoryName] = category;
+    }
+    return acc;
+  }, {} as Record<string, ProjectCategory>);
 
-          {/* File Tree */}
-          <div className="flex-1 overflow-auto p-4">
-            {loading ? (
-              <div className={cn("text-center", darkMode ? "text-gray-400" : "text-gray-500")}>Loading documentation...</div>
-            ) : (
-              Object.entries(filteredDocs).map(([project, files]) => (
-                <ProjectSection
-                  key={project}
-                  project={project}
-                  files={files}
-                  onSelect={handleSelectFile}
-                  selectedFile={selectedFile}
-                  darkMode={darkMode}
+  return (
+    <div className={cn('min-h-screen', darkMode ? 'bg-gray-900' : 'bg-slate-50')}>
+      {/* Hero Section */}
+      <header className={cn('border-b', darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-slate-200')}>
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-start justify-between gap-6">
+            <div className="flex items-center gap-6 flex-1">
+              <div className="relative w-48 h-48 flex-shrink-0">
+                <img
+                  src="/docs-viewer/genie-logo.png"
+                  alt="As You Wish Logo"
+                  className="w-full h-full object-contain genie-magic-animation"
                 />
-              ))
-            )}
+              </div>
+              <div>
+                <h1 className={cn('text-6xl font-bold mb-4 tracking-tight', darkMode ? 'text-gray-100' : 'text-gray-950')}>
+                  As You Wish X1
+                </h1>
+                <p className={cn('text-xl font-medium', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+                  Documentation Hub
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={cn('p-2 rounded-lg', darkMode ? 'hover:bg-gray-700' : 'hover:bg-slate-100')}
+              aria-label="Toggle dark mode"
+            >
+              {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-slate-600" />}
+            </button>
           </div>
         </div>
-      </aside>
+      </header>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Bar */}
-        <div className={cn("border-b p-4 flex items-center gap-4", darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200")}>
-          {!sidebarOpen && (
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className={cn("p-2 rounded-md", darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100")}
-            >
-              <Menu className={cn("w-5 h-5", darkMode ? "text-gray-300" : "")} />
-            </button>
-          )}
-          <h2 className={cn("text-lg font-semibold flex-1", darkMode ? "text-gray-100" : "text-gray-900")}>
-            {selectedFile ? selectedFile.split(':')[1] : 'Documentation Viewer'}
+      <main className="max-w-7xl mx-auto px-6 py-12">
+        {/* Search and Description */}
+        <div className="mb-12">
+          <h2 className={cn('text-3xl font-bold mb-4', darkMode ? 'text-gray-100' : 'text-gray-900')}>
+            Technical Documentation Portal
           </h2>
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className={cn("p-2 rounded-md", darkMode ? "hover:bg-gray-700" : "hover:bg-gray-100")}
-            aria-label="Toggle dark mode"
-          >
-            {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-600" />}
-          </button>
-        </div>
+          <p className={cn('text-lg mb-6', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+            Your Governed, Self-Evolving Execution Platform. Search and explore comprehensive documentation across all projects.
+          </p>
 
-        {/* Content Area */}
-        <div className="flex-1 overflow-auto p-6">
-          {contentLoading ? (
-            <div className={cn("text-center py-12", darkMode ? "text-gray-400" : "text-gray-500")}>Loading content...</div>
-          ) : selectedFile ? (
-            <div className="max-w-5xl mx-auto">
-              {/* Breadcrumb */}
-              <div className={cn("mb-6 text-sm", darkMode ? "text-gray-400" : "text-gray-600")}>
-                <span className={darkMode ? "text-gray-500" : "text-gray-400"}>
-                  {selectedFile.split(':')[0]}
-                </span>
-                {' / '}
-                <span className={darkMode ? "text-gray-300" : "text-gray-700"}>
-                  {selectedFile.split(':')[1]}
-                </span>
-              </div>
-
-              {/* Enhanced Markdown Content */}
-              <article className={cn(
-                "prose prose-lg max-w-none",
+          <div className="relative max-w-xl">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search Documentation..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={cn(
+                'w-full pl-12 pr-4 py-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent',
                 darkMode
-                  ? "prose-invert prose-headings:text-gray-100 prose-p:text-gray-300 prose-a:text-blue-400 prose-strong:text-gray-100 prose-code:text-gray-100 prose-pre:bg-gray-800"
-                  : "prose-slate prose-headings:text-gray-900 prose-p:text-gray-700 prose-a:text-blue-600 prose-strong:text-gray-900"
-              )}>
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  rehypePlugins={[
-                    rehypeHighlight,
-                    rehypeSlug,
-                    [rehypeAutolinkHeadings, { behavior: 'wrap' }]
-                  ]}
-                  components={{
-                    pre: ({ node, ...props }) => {
-                      const code = props.children?.toString() || '';
-                      const id = Math.random().toString(36);
-                      return (
-                        <div className="relative group">
-                          <button
-                            onClick={() => copyToClipboard(code, id)}
-                            className={cn(
-                              "absolute right-2 top-2 p-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity",
-                              darkMode ? "bg-gray-700 hover:bg-gray-600" : "bg-gray-700 hover:bg-gray-600"
-                            )}
-                            aria-label="Copy code"
-                          >
-                            {copiedCode === id ? (
-                              <Check className="w-4 h-4 text-green-400" />
-                            ) : (
-                              <Copy className="w-4 h-4 text-gray-300" />
-                            )}
-                          </button>
-                          <pre {...props} />
-                        </div>
-                      );
-                    },
-                    code: ({ node, ...props }) => {
-                      const isInline = !props.className; // Inline code has no className
-                      return (
-                        <code
-                          className={cn(
-                            isInline && (darkMode ? "bg-gray-800 text-gray-200" : "bg-gray-100 text-gray-800")
-                          )}
-                          {...props}
-                        />
-                      );
-                    },
-                    table: ({ node, ...props }) => (
-                      <div className="overflow-x-auto">
-                        <table {...props} />
-                      </div>
-                    ),
-                  }}
-                >
-                  {fileContent}
-                </ReactMarkdown>
-              </article>
-            </div>
-          ) : (
-            <div className={cn("text-center py-12", darkMode ? "text-gray-400" : "text-gray-500")}>
-              <FileText className={cn("w-16 h-16 mx-auto mb-4", darkMode ? "text-gray-600" : "text-gray-300")} />
-              <p className="text-lg">Select a documentation file to view</p>
-            </div>
-          )}
+                  ? 'bg-gray-800 border-gray-700 text-gray-100 placeholder:text-gray-500'
+                  : 'bg-white border-slate-300 text-gray-900 placeholder:text-slate-400'
+              )}
+            />
+          </div>
         </div>
+
+        {/* Project Categories */}
+        {loading ? (
+          <div className={cn('text-center py-12', darkMode ? 'text-gray-400' : 'text-slate-500')}>
+            Loading Projects...
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {Object.entries(filteredProjects).map(([categoryName, category]) => {
+              const Icon = getCategoryIcon(category.definition.icon);
+
+              return (
+                <section key={categoryName}>
+                  {/* Category Header */}
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className={cn(
+                      'p-2 rounded-lg',
+                      darkMode ? 'bg-gray-800' : 'bg-slate-100'
+                    )}>
+                      <Icon className={cn('w-6 h-6', darkMode ? 'text-gray-300' : 'text-slate-700')} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className={cn('text-2xl font-semibold', darkMode ? 'text-gray-100' : 'text-gray-900')}>
+                        {category.definition.displayName}
+                      </h3>
+                      <p className={cn('text-base', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+                        {category.definition.description}
+                      </p>
+                    </div>
+                    <div className={cn(
+                      'px-3 py-1 rounded-full text-sm font-medium',
+                      darkMode ? 'bg-gray-800 text-gray-300' : 'bg-slate-100 text-slate-700'
+                    )}>
+                      {category.projects.length}
+                    </div>
+                  </div>
+
+                  {/* Project Cards Grid */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {category.projects.map((project) => (
+                      <Link
+                        key={project.name}
+                        href={`/viewer?project=${project.name}`}
+                        className={cn(
+                          'group block rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4',
+                          darkMode
+                            ? 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:shadow-gray-900/50 focus-visible:ring-offset-gray-900'
+                            : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-slate-200/50 focus-visible:ring-offset-slate-50'
+                        )}
+                      >
+                        {/* Project Image - Perfect 1:1 Square */}
+                        <div className="relative w-full pb-[100%] overflow-hidden bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-gray-800/50 dark:to-gray-900/50">
+                          <img
+                            src={`/docs-viewer/${project.name}.png`}
+                            alt={project.displayName}
+                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          />
+                        </div>
+
+                        {/* Project Info */}
+                        <div className="p-5">
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className={cn(
+                              'p-2 rounded-lg',
+                              darkMode ? 'bg-gray-700' : 'bg-slate-100'
+                            )}>
+                              <Icon className={cn('w-5 h-5', darkMode ? 'text-gray-300' : 'text-slate-700')} />
+                            </div>
+                            <h4 className={cn('text-xl font-semibold flex-1', darkMode ? 'text-gray-100' : 'text-gray-900')}>
+                              {project.displayName}
+                            </h4>
+                          </div>
+                          <p className={cn('text-base mb-4', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+                            {project.description}
+                          </p>
+                          <div className={cn(
+                            'flex items-center gap-2 text-sm font-medium',
+                            darkMode ? 'text-blue-400' : 'text-blue-600'
+                          )}>
+                            <span>View Documentation</span>
+                            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+          </div>
+        )}
       </main>
+
+      {/* Footer */}
+      <footer className={cn('border-t mt-20', darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-slate-200')}>
+        <div className="max-w-7xl mx-auto px-6 py-8 text-center">
+          <p className={cn('text-sm mb-1', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+            As You Wish X1 Documentation Hub
+          </p>
+          <p className={cn('text-xs', darkMode ? 'text-gray-500' : 'text-slate-500')}>
+            A governed, self-evolving execution and memory system
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

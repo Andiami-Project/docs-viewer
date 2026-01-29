@@ -3,6 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 
 const PROJECT_ROOTS = {
+  'workspace-docs': '/home/ubuntu/workspace/.claude',
   'wish-x': '/home/ubuntu/workspace/wish-x',
   'wish-backend-x': '/home/ubuntu/workspace/wish-backend-x',
   'doc-automation-hub': '/home/ubuntu/workspace/doc-automation-hub',
