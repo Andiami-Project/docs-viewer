@@ -1,6 +1,9 @@
 import { getProjectMetadata } from '@/lib/project-metadata';
 import { notFound } from 'next/navigation';
+import { FileText } from 'lucide-react';
+import Link from 'next/link';
 import { ProjectHero } from './components/ProjectHero';
+import { KeyDocCards } from './components/KeyDocCards';
 
 export default async function ProjectPage({
   params,
@@ -40,9 +43,20 @@ export default async function ProjectPage({
           </div>
         )}
 
-        {/* Placeholder for Key Docs (Task 5) */}
-        <div className="text-center text-gray-500 dark:text-gray-400 py-12">
-          <p>Key documentation cards will appear here (Task 5)</p>
+        {/* Key Documentation Cards */}
+        {project.keyDocs && project.keyDocs.length > 0 && (
+          <KeyDocCards projectName={project.name} keyDocs={project.keyDocs} />
+        )}
+
+        {/* Browse All Docs Link */}
+        <div className="text-center">
+          <Link
+            href={`/docs-viewer/viewer?project=${project.name}`}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-200"
+          >
+            <FileText className="w-5 h-5" />
+            Browse All Documentation
+          </Link>
         </div>
       </div>
     </div>
