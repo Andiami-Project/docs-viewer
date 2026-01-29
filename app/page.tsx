@@ -176,7 +176,7 @@ export default function HomePage() {
                     {category.projects.map((project) => (
                       <Link
                         key={project.name}
-                        href={`/viewer?project=${project.name}`}
+                        href={`/docs-viewer/project/${project.name}`}
                         className={cn(
                           'group block rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4',
                           darkMode
