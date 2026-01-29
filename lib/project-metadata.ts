@@ -10,6 +10,21 @@ const PROJECT_ROOTS: Record<string, string> = {
   'claude-agent-server': '/home/ubuntu/workspace/claude-agent-server',
 };
 
+// Valid project names for path traversal protection
+const VALID_PROJECT_NAMES = new Set(Object.keys(PROJECT_ROOTS));
+
+// Interfaces for API response data
+interface ProjectData {
+  name: string;
+  displayName?: string;
+  description?: string;
+  category?: string;
+}
+
+interface CategoryData {
+  projects?: ProjectData[];
+}
+
 export interface ProjectMetadata {
   name: string;
   displayName: string;
@@ -30,6 +45,11 @@ export interface ProjectMetadata {
 
 export async function getProjectMetadata(projectName: string): Promise<ProjectMetadata | null> {
   try {
+    // Validate project name to prevent path traversal
+    if (!VALID_PROJECT_NAMES.has(projectName)) {
+      return null;
+    }
+
     // Get actual project root path
     const projectRoot = PROJECT_ROOTS[projectName];
 
@@ -38,16 +58,17 @@ export async function getProjectMetadata(projectName: string): Promise<ProjectMe
     }
 
     // Fetch project basic info from API
-    const response = await fetch('http://localhost:3000/docs-viewer/api/projects');
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    const response = await fetch(`${baseUrl}/docs-viewer/api/projects`);
     const data = await response.json();
 
     // Find project in the data structure
     let project = null;
     if (Array.isArray(data)) {
-      project = data.find((p: any) => p.name === projectName);
+      project = data.find((p: ProjectData) => p.name === projectName);
     } else {
       for (const category of Object.values(data)) {
-        const found = (category as any).projects?.find((p: any) => p.name === projectName);
+        const found = (category as CategoryData).projects?.find((p: ProjectData) => p.name === projectName);
         if (found) {
           project = found;
           break;
