@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Copy, Check, Package, FileText, Clock } from 'lucide-react';
 
 interface ProjectHeroProps {
@@ -23,14 +23,34 @@ export function ProjectHero({
   installCommand
 }: ProjectHeroProps) {
   const [copied, setCopied] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleCopy = () => {
     if (installCommand) {
       navigator.clipboard.writeText(installCommand);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+
+      // Clear existing timeout if any
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      // Set new timeout and store reference
+      timeoutRef.current = setTimeout(() => {
+        setCopied(false);
+        timeoutRef.current = null;
+      }, 2000);
     }
   };
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   // Category-based gradient colors
   const gradients: Record<string, string> = {
