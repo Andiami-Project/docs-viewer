@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getProjectMetadata } from '@/lib/project-metadata';
 import { parseMarkdownStructure } from '@/lib/markdown-parser';
+import { PROJECT_ROOTS } from '@/lib/project-config';
 import fs from 'fs';
 import path from 'path';
 import ReactMarkdown from 'react-markdown';
@@ -8,14 +9,6 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import { TableOfContents } from './components/TableOfContents';
-
-const PROJECT_ROOTS: Record<string, string> = {
-  'workspace-docs': '/home/ubuntu/workspace/.docs-viewer-data/workspace-docs',
-  'wish-x': '/home/ubuntu/workspace/wish-x',
-  'wish-backend-x': '/home/ubuntu/workspace/wish-backend-x',
-  'doc-automation-hub': '/home/ubuntu/workspace/doc-automation-hub',
-  'claude-agent-server': '/home/ubuntu/workspace/claude-agent-server',
-};
 
 export default async function DocPage({
   params,

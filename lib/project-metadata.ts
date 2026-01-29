@@ -1,18 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { parseMarkdownStructure, extractReadmePreview } from './markdown-parser';
-
-// Map project names to their actual root directories
-const PROJECT_ROOTS: Record<string, string> = {
-  'workspace-docs': '/home/ubuntu/workspace/.docs-viewer-data/workspace-docs',
-  'wish-x': '/home/ubuntu/workspace/wish-x',
-  'wish-backend-x': '/home/ubuntu/workspace/wish-backend-x',
-  'doc-automation-hub': '/home/ubuntu/workspace/doc-automation-hub',
-  'claude-agent-server': '/home/ubuntu/workspace/claude-agent-server',
-};
-
-// Valid project names for path traversal protection
-const VALID_PROJECT_NAMES = new Set(Object.keys(PROJECT_ROOTS));
+import { PROJECT_ROOTS, VALID_PROJECT_NAMES } from './project-config';
 
 // Static project metadata (no API dependency)
 const PROJECT_INFO: Record<string, { displayName: string; description: string; category: string }> = {
