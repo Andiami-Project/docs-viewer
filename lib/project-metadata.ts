@@ -14,17 +14,34 @@ const PROJECT_ROOTS: Record<string, string> = {
 // Valid project names for path traversal protection
 const VALID_PROJECT_NAMES = new Set(Object.keys(PROJECT_ROOTS));
 
-// Interfaces for API response data
-interface ProjectData {
-  name: string;
-  displayName?: string;
-  description?: string;
-  category?: string;
-}
-
-interface CategoryData {
-  projects?: ProjectData[];
-}
+// Static project metadata (no API dependency)
+const PROJECT_INFO: Record<string, { displayName: string; description: string; category: string }> = {
+  'workspace-docs': {
+    displayName: 'Workspace Documentation',
+    description: 'Comprehensive documentation for the entire workspace',
+    category: 'infrastructure',
+  },
+  'wish-x': {
+    displayName: 'Wish X',
+    description: 'Main frontend application with Next.js and React',
+    category: 'frontend',
+  },
+  'wish-backend-x': {
+    displayName: 'Wish Backend X',
+    description: 'Backend services powered by Trigger.dev',
+    category: 'backend',
+  },
+  'doc-automation-hub': {
+    displayName: 'Doc Automation Hub',
+    description: 'Automated documentation generation and management',
+    category: 'infrastructure',
+  },
+  'claude-agent-server': {
+    displayName: 'Claude Agent Server',
+    description: 'Claude AI agent server and utilities',
+    category: 'tools',
+  },
+};
 
 export interface ProjectMetadata {
   name: string;
@@ -56,33 +73,16 @@ export async function getProjectMetadata(projectName: string): Promise<ProjectMe
       return null;
     }
 
+    // Get project info from static metadata
+    const projectInfo = PROJECT_INFO[projectName];
+    if (!projectInfo) {
+      return null;
+    }
+
     // Get actual project root path
     const projectRoot = PROJECT_ROOTS[projectName];
 
     if (!projectRoot || !fs.existsSync(projectRoot)) {
-      return null;
-    }
-
-    // Fetch project basic info from API
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const response = await fetch(`${baseUrl}/docs-viewer/api/projects`);
-    const data = await response.json();
-
-    // Find project in the data structure
-    let project = null;
-    if (Array.isArray(data)) {
-      project = data.find((p: ProjectData) => p.name === projectName);
-    } else {
-      for (const category of Object.values(data)) {
-        const found = (category as CategoryData).projects?.find((p: ProjectData) => p.name === projectName);
-        if (found) {
-          project = found;
-          break;
-        }
-      }
-    }
-
-    if (!project) {
       return null;
     }
 
@@ -115,10 +115,10 @@ export async function getProjectMetadata(projectName: string): Promise<ProjectMe
     }
 
     return {
-      name: project.name,
-      displayName: project.displayName || project.name,
-      description: project.description || '',
-      category: project.category || 'uncategorized',
+      name: projectName,
+      displayName: projectInfo.displayName,
+      description: projectInfo.description,
+      category: projectInfo.category,
       stats: {
         totalDocs,
         lastUpdated,
