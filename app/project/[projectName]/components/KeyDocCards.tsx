@@ -57,7 +57,7 @@ export function KeyDocCards({ projectName, keyDocs }: KeyDocCardsProps) {
           return (
             <Link
               key={doc.path}
-              href={`/docs-viewer/project/${projectName}/docs${doc.path}`}
+              href={`/project/${projectName}/docs${doc.path}`}
               className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl p-6 border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 min-h-[180px] ${config.hoverColor}`}
             >
               {/* Content */}

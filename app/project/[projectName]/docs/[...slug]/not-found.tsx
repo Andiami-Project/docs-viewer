@@ -9,7 +9,7 @@ export default function NotFound() {
           Documentation file not found
         </p>
         <Link
-          href="/docs-viewer"
+          href="/"
           className="inline-block px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
         >
           Back to Home

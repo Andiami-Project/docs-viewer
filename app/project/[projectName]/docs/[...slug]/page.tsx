@@ -42,12 +42,12 @@ export default async function DocPage({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
         {/* Breadcrumb */}
         <nav className="mb-4 md:mb-6 text-xs md:text-sm text-gray-600 dark:text-gray-400" aria-label="Breadcrumb">
-          <a href="/docs-viewer" className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">
+          <a href="/" className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors">
             Home
           </a>
           {' / '}
           <a
-            href={`/docs-viewer/project/${projectName}`}
+            href={`/project/${projectName}`}
             className="hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
           >
             {project.displayName}

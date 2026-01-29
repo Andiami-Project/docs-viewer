@@ -51,7 +51,7 @@ export default async function ProjectPage({
         {/* Browse All Docs Link */}
         <div className="text-center mt-6 md:mt-8">
           <Link
-            href={`/docs-viewer/viewer?project=${project.name}`}
+            href={`/viewer?project=${project.name}`}
             className="inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white font-medium rounded-lg transition-colors duration-200 text-sm md:text-base"
           >
             <FileText className="w-5 h-5" />
