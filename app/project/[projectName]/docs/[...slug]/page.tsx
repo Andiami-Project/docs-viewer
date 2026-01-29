@@ -68,7 +68,7 @@ export default async function DocPage({
           </aside>
 
           {/* Main content */}
-          <article className="bg-white dark:bg-gray-800 rounded-xl p-6 md:p-8 border border-slate-200 dark:border-gray-700 prose prose-sm md:prose-base prose-slate dark:prose-invert max-w-4xl">
+          <article className="bg-white dark:bg-gray-900 rounded-xl p-6 md:p-8 border border-slate-200 dark:border-gray-700 prose prose-sm md:prose-base prose-slate dark:prose-invert max-w-4xl prose-headings:text-slate-900 dark:prose-headings:text-gray-100 prose-p:text-slate-700 dark:prose-p:text-gray-300 prose-strong:text-slate-900 dark:prose-strong:text-gray-100 prose-code:text-slate-800 dark:prose-code:text-gray-200 prose-li:text-slate-700 dark:prose-li:text-gray-300">
             <ReactMarkdown
               rehypePlugins={[
                 rehypeHighlight,
