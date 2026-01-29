@@ -15,22 +15,26 @@ interface KeyDocCardsProps {
 const typeConfig = {
   api: {
     icon: Code,
-    color: 'from-blue-500 to-cyan-600',
+    color: 'bg-blue-600 dark:bg-blue-700',
+    hoverColor: 'group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20',
     label: 'API Reference',
   },
   config: {
     icon: Settings,
-    color: 'from-purple-500 to-pink-600',
+    color: 'bg-purple-600 dark:bg-purple-700',
+    hoverColor: 'group-hover:bg-purple-50 dark:group-hover:bg-purple-900/20',
     label: 'Configuration',
   },
   guide: {
     icon: FileText,
-    color: 'from-green-500 to-emerald-600',
+    color: 'bg-green-600 dark:bg-green-700',
+    hoverColor: 'group-hover:bg-green-50 dark:group-hover:bg-green-900/20',
     label: 'Guide',
   },
   example: {
     icon: Lightbulb,
-    color: 'from-orange-500 to-red-600',
+    color: 'bg-orange-600 dark:bg-orange-700',
+    hoverColor: 'group-hover:bg-orange-50 dark:group-hover:bg-orange-900/20',
     label: 'Example',
   },
 };
@@ -45,7 +49,7 @@ export function KeyDocCards({ projectName, keyDocs }: KeyDocCardsProps) {
       <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         Key Documentation
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {keyDocs.map((doc) => {
           const config = typeConfig[doc.type];
           const Icon = config.icon;
@@ -54,24 +58,19 @@ export function KeyDocCards({ projectName, keyDocs }: KeyDocCardsProps) {
             <Link
               key={doc.path}
               href={`/docs-viewer/project/${projectName}/docs${doc.path}`}
-              className="group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl p-6 border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:-translate-y-1"
+              className={`group relative overflow-hidden bg-white dark:bg-gray-800 rounded-xl p-6 border border-slate-200 dark:border-gray-700 hover:shadow-lg transition-all duration-200 hover:-translate-y-1 min-h-[180px] ${config.hoverColor}`}
             >
-              {/* Gradient accent on hover */}
-              <div
-                className={`absolute inset-0 bg-gradient-to-br ${config.color} opacity-0 group-hover:opacity-5 transition-opacity duration-200`}
-              />
-
               {/* Content */}
               <div className="relative">
-                {/* Icon with gradient background */}
+                {/* Icon with solid background */}
                 <div
-                  className={`w-12 h-12 rounded-lg bg-gradient-to-br ${config.color} flex items-center justify-center mb-4`}
+                  className={`w-12 h-12 rounded-lg ${config.color} flex items-center justify-center mb-4 transition-transform duration-200 group-hover:scale-110`}
                 >
                   <Icon className="w-6 h-6 text-white" />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors capitalize">
+                <h3 className="text-base md:text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors capitalize line-clamp-2">
                   {doc.title}
                 </h3>
 
