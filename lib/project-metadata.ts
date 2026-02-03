@@ -3,6 +3,12 @@ import path from 'path';
 import { parseMarkdownStructure, extractReadmePreview } from './markdown-parser';
 import { PROJECT_ROOTS, VALID_PROJECT_NAMES } from './project-config';
 
+// Minimal skip list - only exclude build artifacts and node_modules
+const SKIP_DIRECTORIES = new Set([
+  'node_modules', '.git', '.next', 'dist', 'build',
+  'out', '.vercel', '.turbo', 'coverage',
+]);
+
 // Static project metadata (no API dependency)
 const PROJECT_INFO: Record<string, { displayName: string; description: string; category: string }> = {
   'workspace-docs': {
@@ -125,32 +131,36 @@ export async function getProjectMetadata(projectName: string): Promise<ProjectMe
 
 function getAllMarkdownFiles(dir: string): string[] {
   const files: string[] = [];
+  let skippedCount = 0;
+  let foundCount = 0;
 
-  function traverse(currentPath: string) {
+  function traverse(currentPath: string, depth: number = 0) {
     try {
       const entries = fs.readdirSync(currentPath, { withFileTypes: true });
 
       for (const entry of entries) {
-        // Skip node_modules, .git, and other build directories
-        if (entry.name === 'node_modules' || entry.name === '.git' || entry.name === '.next' || entry.name === 'dist') {
+        const fullPath = path.join(currentPath, entry.name);
+
+        // Only skip known build directories
+        if (entry.isDirectory() && SKIP_DIRECTORIES.has(entry.name)) {
+          skippedCount++;
           continue;
         }
 
-        const fullPath = path.join(currentPath, entry.name);
-
         if (entry.isDirectory()) {
-          traverse(fullPath);
+          traverse(fullPath, depth + 1);
         } else if (entry.isFile() && entry.name.endsWith('.md')) {
           files.push(fullPath);
+          foundCount++;
         }
       }
     } catch (err) {
-      // Skip directories we don't have permission to read
-      console.error(`Error reading directory ${currentPath}:`, err);
+      console.error(`Cannot read ${currentPath}:`, err);
     }
   }
 
   traverse(dir);
+  console.log(`[Discovery] Found ${foundCount} files, skipped ${skippedCount} dirs in ${dir}`);
   return files;
 }
 
