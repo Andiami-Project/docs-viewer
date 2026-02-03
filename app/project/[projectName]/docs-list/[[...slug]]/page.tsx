@@ -6,6 +6,9 @@ import fs from 'fs';
 import path from 'path';
 import { SplitPanelViewer } from './components/SplitPanelViewer';
 
+// Enable ISR with 30-second revalidation
+export const revalidate = 30;
+
 export default async function DocsListPage({
   params,
 }: {
