@@ -1,13 +1,15 @@
 module.exports = {
   apps: [{
     name: 'docs-viewer',
-    script: 'npm',
-    args: 'run dev',  // Temporary: using dev mode due to Next.js 16 + React 19 build bug
+    script: 'node_modules/.bin/next',
+    args: 'dev -p 3003',  // Dev mode with explicit port (bypasses static gen bug)
+    cwd: '/home/ubuntu/workspace/docs-viewer',
     env: {
       NODE_ENV: 'development',
-      PORT: 3002
+      PORT: 3003
     },
     instances: 1,
+    exec_mode: 'fork',
     autorestart: true,
     watch: false,
     max_memory_restart: '1G'
