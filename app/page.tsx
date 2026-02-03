@@ -82,7 +82,7 @@ export default function HomePage() {
             <div className="flex items-center gap-6 flex-1">
               <div className="relative w-48 h-48 flex-shrink-0">
                 <img
-                  src="/docs-viewer/genie-logo.png"
+                  src="/genie-logo.png"
                   alt="As You Wish Logo"
                   className="w-full h-full object-contain genie-magic-animation"
                 />
@@ -187,7 +187,7 @@ export default function HomePage() {
                         {/* Project Image - Perfect 1:1 Square */}
                         <div className="relative w-full pb-[100%] overflow-hidden bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-gray-800/50 dark:to-gray-900/50">
                           <img
-                            src={`/docs-viewer/${project.name}.png`}
+                            src={`/${project.name}.png`}
                             alt={project.displayName}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
