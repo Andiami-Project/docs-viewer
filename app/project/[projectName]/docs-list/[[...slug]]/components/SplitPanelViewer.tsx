@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import { RefreshButton } from '@/components/RefreshButton';
 
 interface Doc {
   filename: string;
@@ -71,15 +72,20 @@ export function SplitPanelViewer({ project, docs, selectedDoc, selectedContent }
           </nav>
 
           {/* Project title */}
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
-              <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0 shadow-md">
+                <svg className="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <div>
+                <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-0.5">{project.displayName}</h1>
+                <p className="text-sm md:text-base text-gray-900">{project.description}</p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-0.5">{project.displayName}</h1>
-              <p className="text-sm md:text-base text-gray-900">{project.description}</p>
+            <div className="flex items-center">
+              <RefreshButton />
             </div>
           </div>
         </div>
