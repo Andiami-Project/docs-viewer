@@ -59,18 +59,25 @@ export default function HomePage() {
     }
   };
 
+  // Filter projects based on search query
   const filteredProjects = Object.entries(projects).reduce((acc, [categoryName, category]) => {
-    if (searchQuery) {
-      const filtered = category.projects.filter(p =>
-        p.displayName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchQuery.toLowerCase())
+    const query = searchQuery.toLowerCase();
+    const matchingProjects = category.projects.filter(project => {
+      return (
+        project.displayName.toLowerCase().includes(query) ||
+        project.description.toLowerCase().includes(query) ||
+        categoryName.toLowerCase().includes(query) ||
+        category.definition.displayName.toLowerCase().includes(query)
       );
-      if (filtered.length > 0) {
-        acc[categoryName] = { ...category, projects: filtered };
-      }
-    } else {
-      acc[categoryName] = category;
+    });
+
+    if (matchingProjects.length > 0) {
+      acc[categoryName] = {
+        ...category,
+        projects: matchingProjects
+      };
     }
+
     return acc;
   }, {} as Record<string, ProjectCategory>);
 
@@ -144,93 +151,103 @@ export default function HomePage() {
             Loading Projects...
           </div>
         ) : (
-          <div className="space-y-12">
-            {Object.entries(filteredProjects).map(([categoryName, category]) => {
-              const Icon = getCategoryIcon(category.definition.icon);
+          <>
+            <div className="space-y-12">
+              {Object.entries(filteredProjects).map(([categoryName, category]) => {
+                const Icon = getCategoryIcon(category.definition.icon);
 
-              return (
-                <section key={categoryName}>
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className={cn(
-                      'p-2 rounded-lg',
-                      darkMode ? 'bg-gray-800' : 'bg-slate-100'
-                    )}>
-                      <Icon className={cn('w-6 h-6', darkMode ? 'text-gray-300' : 'text-slate-700')} />
+                return (
+                  <section key={categoryName}>
+                    {/* Category Header */}
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className={cn(
+                        'p-2 rounded-lg',
+                        darkMode ? 'bg-gray-800' : 'bg-slate-100'
+                      )}>
+                        <Icon className={cn('w-6 h-6', darkMode ? 'text-gray-300' : 'text-slate-700')} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className={cn('text-2xl font-semibold', darkMode ? 'text-gray-100' : 'text-gray-900')}>
+                          {category.definition.displayName}
+                        </h3>
+                        <p className={cn('text-base', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+                          {category.definition.description}
+                        </p>
+                      </div>
+                      <div className={cn(
+                        'px-3 py-1 rounded-full text-sm font-medium',
+                        darkMode ? 'bg-gray-800 text-gray-300' : 'bg-slate-100 text-slate-700'
+                      )}>
+                        {category.projects.length}
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h3 className={cn('text-2xl font-semibold', darkMode ? 'text-gray-100' : 'text-gray-900')}>
-                        {category.definition.displayName}
-                      </h3>
-                      <p className={cn('text-base', darkMode ? 'text-gray-400' : 'text-slate-600')}>
-                        {category.definition.description}
-                      </p>
-                    </div>
-                    <div className={cn(
-                      'px-3 py-1 rounded-full text-sm font-medium',
-                      darkMode ? 'bg-gray-800 text-gray-300' : 'bg-slate-100 text-slate-700'
-                    )}>
-                      {category.projects.length}
-                    </div>
-                  </div>
 
-                  {/* Project Cards Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {category.projects.map((project) => (
-                      <Link
-                        key={project.name}
-                        href={`/project/${project.name}`}
-                        className={cn(
-                          'group block rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4',
-                          darkMode
-                            ? 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:shadow-gray-900/50 focus-visible:ring-offset-gray-900'
-                            : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-slate-200/50 focus-visible:ring-offset-slate-50'
-                        )}
-                      >
-                        {/* Project Image - Perfect 1:1 Square */}
-                        <div className="relative w-full pb-[100%] overflow-hidden bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-gray-800/50 dark:to-gray-900/50">
-                          <Image
-                            src={`/${project.name}.png`}
-                            alt={project.displayName}
-                            width={400}
-                            height={400}
-                            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                          />
-                        </div>
+                    {/* Project Cards Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {category.projects.map((project) => (
+                        <Link
+                          key={project.name}
+                          href={`/project/${project.name}`}
+                          className={cn(
+                            'group block rounded-xl border overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4',
+                            darkMode
+                              ? 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:shadow-gray-900/50 focus-visible:ring-offset-gray-900'
+                              : 'bg-white border-slate-200 hover:border-slate-300 hover:shadow-slate-200/50 focus-visible:ring-offset-slate-50'
+                          )}
+                        >
+                          {/* Project Image - Perfect 1:1 Square */}
+                          <div className="relative w-full pb-[100%] overflow-hidden bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-gray-800/50 dark:to-gray-900/50">
+                            <Image
+                              src={`/${project.name}.png`}
+                              alt={project.displayName}
+                              width={400}
+                              height={400}
+                              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                            />
+                          </div>
 
-                        {/* Project Info */}
-                        <div className="p-5">
-                          <div className="flex items-start justify-between gap-3 mb-2">
-                            <div className={cn(
-                              'p-2 rounded-lg',
-                              darkMode ? 'bg-gray-700' : 'bg-slate-100'
-                            )}>
-                              <Icon className={cn('w-5 h-5', darkMode ? 'text-gray-300' : 'text-slate-700')} />
+                          {/* Project Info */}
+                          <div className="p-5">
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <div className={cn(
+                                'p-2 rounded-lg',
+                                darkMode ? 'bg-gray-700' : 'bg-slate-100'
+                              )}>
+                                <Icon className={cn('w-5 h-5', darkMode ? 'text-gray-300' : 'text-slate-700')} />
+                              </div>
+                              <h4 className={cn('text-xl font-semibold flex-1', darkMode ? 'text-gray-100' : 'text-gray-900')}>
+                                {project.displayName}
+                              </h4>
                             </div>
-                            <h4 className={cn('text-xl font-semibold flex-1', darkMode ? 'text-gray-100' : 'text-gray-900')}>
-                              {project.displayName}
-                            </h4>
+                            <p className={cn('text-base mb-4', darkMode ? 'text-gray-400' : 'text-slate-600')}>
+                              {project.description}
+                            </p>
+                            <div className={cn(
+                              'flex items-center gap-2 text-sm font-medium',
+                              darkMode ? 'text-blue-400' : 'text-blue-600'
+                            )}>
+                              <span>View Documentation</span>
+                              <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                              </svg>
+                            </div>
                           </div>
-                          <p className={cn('text-base mb-4', darkMode ? 'text-gray-400' : 'text-slate-600')}>
-                            {project.description}
-                          </p>
-                          <div className={cn(
-                            'flex items-center gap-2 text-sm font-medium',
-                            darkMode ? 'text-blue-400' : 'text-blue-600'
-                          )}>
-                            <span>View Documentation</span>
-                            <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </div>
-                        </div>
-                      </Link>
-                    ))}
-                  </div>
-                </section>
-              );
-            })}
-          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+
+            {/* No Results Message */}
+            {Object.keys(filteredProjects).length === 0 && searchQuery && (
+              <div className={cn('text-center py-12', darkMode ? 'text-gray-400' : 'text-slate-500')}>
+                <p className="text-lg">No projects found matching &quot;{searchQuery}&quot;</p>
+                <p className="text-sm mt-2">Try a different search term</p>
+              </div>
+            )}
+          </>
         )}
       </main>
 
