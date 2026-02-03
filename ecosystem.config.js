@@ -2,10 +2,10 @@ module.exports = {
   apps: [{
     name: 'docs-viewer',
     script: 'npm',
-    args: 'start',
+    args: 'run dev',  // Temporary: using dev mode due to Next.js 16 + React 19 build bug
     env: {
-      NODE_ENV: 'production',
-      PORT: 3890
+      NODE_ENV: 'development',
+      PORT: 3002
     },
     instances: 1,
     autorestart: true,
