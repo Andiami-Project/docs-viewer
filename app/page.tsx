@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Search, FileText, Server, Settings, Moon, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -81,9 +82,11 @@ export default function HomePage() {
           <div className="flex items-start justify-between gap-6">
             <div className="flex items-center gap-6 flex-1">
               <div className="relative w-48 h-48 flex-shrink-0">
-                <img
+                <Image
                   src="/genie-logo.png"
                   alt="As You Wish Logo"
+                  width={192}
+                  height={192}
                   className="w-full h-full object-contain genie-magic-animation"
                 />
               </div>
@@ -186,9 +189,11 @@ export default function HomePage() {
                       >
                         {/* Project Image - Perfect 1:1 Square */}
                         <div className="relative w-full pb-[100%] overflow-hidden bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-gray-800/50 dark:to-gray-900/50">
-                          <img
+                          <Image
                             src={`/${project.name}.png`}
                             alt={project.displayName}
+                            width={400}
+                            height={400}
                             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           />
                         </div>
