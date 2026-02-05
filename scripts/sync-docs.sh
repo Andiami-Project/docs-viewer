@@ -34,15 +34,11 @@ for project in "${!SOURCES[@]}"; do
             --exclude='.next' \
             --exclude='dist' \
             --exclude='build' \
-            --exclude='.claude' \
             --exclude='.omc' \
             --exclude='.chat-analysis' \
             --exclude='.playwright-mcp' \
             --exclude='docs-viewer' \
-            --exclude='wish-x' \
-            --exclude='wish-backend-x' \
-            --exclude='claude-agent-server' \
-            --exclude='doc-automation-hub' \
+            --exclude='.claude' \
             --exclude='*.log' \
             --exclude='.env*' \
             --include='*/' \
