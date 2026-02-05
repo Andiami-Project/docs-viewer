@@ -38,6 +38,11 @@ for project in "${!SOURCES[@]}"; do
             --exclude='.omc' \
             --exclude='.chat-analysis' \
             --exclude='.playwright-mcp' \
+            --exclude='docs-viewer' \
+            --exclude='wish-x' \
+            --exclude='wish-backend-x' \
+            --exclude='claude-agent-server' \
+            --exclude='doc-automation-hub' \
             --exclude='*.log' \
             --exclude='.env*' \
             --include='*/' \
