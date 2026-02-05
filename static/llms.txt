@@ -1,0 +1,55 @@
+# As You Wish Ecosystem Documentation
+# llms.txt - Instructions for AI Tools
+
+## About
+This is the documentation hub for the As You Wish Ecosystem.
+Built with Docusaurus - all pages are static HTML, instantly accessible.
+
+## Quick Access
+
+All documentation pages are static HTML. Simply fetch any URL to get full content.
+
+Base URL: https://y1.andiami.tech/docs-viewer
+
+## Projects
+
+- wish-x: Frontend (Next.js 15 + React 19)
+  URL: https://y1.andiami.tech/docs-viewer/wish-x
+
+- wish-backend-x: Backend (Trigger.dev v4)
+  URL: https://y1.andiami.tech/docs-viewer/wish-backend-x
+
+- claude-agent-server: AI Agent (WebSocket + Agent SDK)
+  URL: https://y1.andiami.tech/docs-viewer/claude-agent-server
+
+- doc-automation-hub: Documentation automation tools
+  URL: https://y1.andiami.tech/docs-viewer/doc-automation-hub
+
+- workspace-claude-files: Claude configuration files
+  URL: https://y1.andiami.tech/docs-viewer/workspace-claude-files
+
+- workspace-documentation: General workspace documentation
+  URL: https://y1.andiami.tech/docs-viewer/workspace-documentation
+
+## How to Access
+
+1. Fetch any page URL directly - content is in the HTML
+2. Use /sitemap.xml to get all page URLs
+3. Each page is server-rendered static HTML
+
+## Sitemap
+https://y1.andiami.tech/docs-viewer/sitemap.xml
+
+## Content Types
+- Markdown documentation (.md files)
+- Technical specifications
+- Architecture documents
+- API documentation
+- Setup guides
+- Troubleshooting guides
+
+## No Rate Limiting
+All pages are static files served via CDN. No rate limiting.
+
+## Contact
+Documentation viewer maintained at: https://y1.andiami.tech/docs-viewer
