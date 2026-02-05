@@ -5,6 +5,7 @@ import { PROJECT_ROOTS } from '@/lib/project-config';
 import fs from 'fs';
 import path from 'path';
 import { SplitPanelViewer } from './components/SplitPanelViewer';
+import { detectCategories } from '@/lib/category-detection';
 
 // Enable ISR with 30-second revalidation
 export const revalidate = 30;
@@ -20,6 +21,10 @@ export default async function DocsListPage({
   if (!project) {
     notFound();
   }
+
+  // Get project root and category config
+  const projectRoot = PROJECT_ROOTS[projectName];
+  const categoryConfig = await detectCategories(projectRoot);
 
   // Fetch all documentation
   const rawDocs = await getDocumentationList(projectName);
@@ -50,15 +55,30 @@ export default async function DocsListPage({
     }
   }
 
-  // If no document selected, select the first one by default
+  // If no document selected, try to select README.md first, then fall back to first doc
   if (!selectedDoc && docs.length > 0) {
-    const firstDoc = docs[0];
     const projectRoot = PROJECT_ROOTS[projectName];
-    const mdPath = path.join(projectRoot, `${firstDoc.path}.md`);
 
-    if (fs.existsSync(mdPath)) {
-      selectedContent = fs.readFileSync(mdPath, 'utf-8');
-      selectedDoc = firstDoc;
+    // First, try to find README.md
+    const readmeDoc = docs.find(d => d.filename.toLowerCase() === 'readme' || d.filename.toLowerCase() === 'readme.md');
+
+    if (readmeDoc) {
+      const mdPath = path.join(projectRoot, `${readmeDoc.path}.md`);
+      if (fs.existsSync(mdPath)) {
+        selectedContent = fs.readFileSync(mdPath, 'utf-8');
+        selectedDoc = readmeDoc;
+      }
+    }
+
+    // If no README found, fall back to first document
+    if (!selectedDoc) {
+      const firstDoc = docs[0];
+      const mdPath = path.join(projectRoot, `${firstDoc.path}.md`);
+
+      if (fs.existsSync(mdPath)) {
+        selectedContent = fs.readFileSync(mdPath, 'utf-8');
+        selectedDoc = firstDoc;
+      }
     }
   }
 
@@ -73,6 +93,7 @@ export default async function DocsListPage({
       docs={docs}
       selectedDoc={selectedDoc}
       selectedContent={selectedContent}
+      categoryConfig={categoryConfig}
     />
   );
 }

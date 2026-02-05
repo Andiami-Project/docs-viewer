@@ -3,28 +3,63 @@ import fs from 'fs';
 import path from 'path';
 import { PROJECT_ROOTS } from './project-config';
 import { DocMetadata } from './doc-utils';
+import { detectCategories, type ProjectDocsConfig } from './category-detection';
 
-export function categorizeDoc(filename: string, content: string): DocMetadata['category'] {
-  const lower = filename.toLowerCase();
-  const contentLower = content.toLowerCase();
+// Cache per project (cleared on each build, persists during dev)
+const projectConfigCache = new Map<string, ProjectDocsConfig>();
 
-  if (lower.includes('setup') || lower.includes('install') || lower.includes('getting-started')) {
-    return 'setup';
+/**
+ * Get or load project documentation configuration.
+ * Uses caching to avoid repeated file system operations.
+ */
+async function getProjectConfig(projectRoot: string): Promise<ProjectDocsConfig> {
+  if (!projectConfigCache.has(projectRoot)) {
+    const config = await detectCategories(projectRoot);
+    projectConfigCache.set(projectRoot, config);
   }
-  if (lower.includes('api') || contentLower.includes('endpoint') || contentLower.includes('rest api')) {
-    return 'api';
-  }
-  if (lower.includes('config') || lower.includes('.env') || lower.includes('environment')) {
-    return 'config';
-  }
-  if (lower.includes('troubleshoot') || lower.includes('debug') || lower.includes('fix') || lower.includes('error')) {
-    return 'troubleshooting';
-  }
-  if (lower.includes('readme') || lower.includes('guide') || lower.includes('tutorial')) {
-    return 'guide';
+  return projectConfigCache.get(projectRoot)!;
+}
+
+/**
+ * Categorize a document based on its location in the directory structure.
+ *
+ * Strategy:
+ * 1. Extract directory from relativePath (e.g., "docs/01-setup/plugins.md" → "01-setup")
+ * 2. Look up directory in project's detected categories
+ * 3. Fall back to "other" for root-level files
+ *
+ * @param filename - Name of the file
+ * @param content - File content (unused but kept for compatibility)
+ * @param relativePath - Relative path from project root
+ * @param projectRoot - Absolute path to project root
+ * @returns Category key (directory name) or 'other'
+ */
+export async function categorizeDoc(
+  filename: string,
+  content: string,
+  relativePath: string,
+  projectRoot: string
+): Promise<string> {
+  const config = await getProjectConfig(projectRoot);
+
+  // Extract directory from relativePath
+  // Examples:
+  // - "docs/01-setup/plugins.md" → "01-setup"
+  // - ".claude/docs/02-planning/requirements.md" → "02-planning"
+  // - "api-reference/endpoints.md" → "api-reference"
+  const pathMatch = relativePath.match(/(?:docs|\.claude\/docs)[\/\\]([^\/\\]+)[\/\\]/);
+
+  if (pathMatch) {
+    const dirName = pathMatch[1];
+
+    // Check if we have a category config for this directory
+    if (config.categories?.[dirName]) {
+      return dirName; // Return directory name as category key
+    }
   }
 
-  return 'other';
+  // Fallback to "other" for root-level files
+  return config.defaultCategory || 'other';
 }
 
 export function getIconForCategory(category: DocMetadata['category']): string {
@@ -61,6 +96,12 @@ export function extractDescription(content: string): string {
   return description || 'No description available';
 }
 
+// Directories to skip during recursive traversal
+const SKIP_DIRECTORIES = new Set([
+  'node_modules', '.git', '.next', 'dist', 'build',
+  'out', '.vercel', '.turbo', 'coverage', '.cache',
+]);
+
 export async function getDocumentationList(projectName: string): Promise<DocMetadata[]> {
   const projectPath = PROJECT_ROOTS[projectName as keyof typeof PROJECT_ROOTS];
   if (!projectPath) {
@@ -71,41 +112,63 @@ export async function getDocumentationList(projectName: string): Promise<DocMeta
   const docs: DocMetadata[] = [];
 
   try {
-    // Read all files in the directory
-    const files = fs.readdirSync(docsDir);
+    // Recursively find all markdown files
+    async function traverseDirectory(currentPath: string, isRoot: boolean = false): Promise<void> {
+      const entries = fs.readdirSync(currentPath, { withFileTypes: true });
 
-    for (const file of files) {
-      // Only process markdown files
-      if (!file.endsWith('.md')) continue;
+      for (const entry of entries) {
+        const fullPath = path.join(currentPath, entry.name);
 
-      const filePath = path.join(docsDir, file);
-      const stats = fs.statSync(filePath);
+        // Skip build directories and hidden folders (but allow root directory itself)
+        if (entry.isDirectory()) {
+          // Always skip these directories
+          if (SKIP_DIRECTORIES.has(entry.name)) {
+            continue;
+          }
+          // Skip hidden directories ONLY if they are subdirectories (not root)
+          if (!isRoot && entry.name.startsWith('.')) {
+            continue;
+          }
+          // Recursively traverse subdirectories
+          await traverseDirectory(fullPath, false);
+        } else if (entry.isFile() && entry.name.endsWith('.md')) {
+          // Process markdown files
+          try {
+            const stats = fs.statSync(fullPath);
+            const content = fs.readFileSync(fullPath, 'utf-8');
 
-      // Skip if it's a directory
-      if (stats.isDirectory()) continue;
+            // Get relative path from project root
+            const relativePath = path.relative(docsDir, fullPath);
+            const pathWithoutExt = relativePath.replace('.md', '');
 
-      // Read file content
-      const content = fs.readFileSync(filePath, 'utf-8');
+            // Extract metadata (now async)
+            const category = await categorizeDoc(entry.name, content, relativePath, projectPath);
+            const description = extractDescription(content);
+            const icon = getIconForCategory(category as DocMetadata['category']);
 
-      // Extract metadata
-      const category = categorizeDoc(file, content);
-      const description = extractDescription(content);
-      const icon = getIconForCategory(category);
-
-      docs.push({
-        name: file,
-        path: file.replace('.md', ''),
-        description,
-        category,
-        size: stats.size,
-        modified: stats.mtime,
-        icon,
-      });
+            docs.push({
+              name: entry.name,
+              path: pathWithoutExt,
+              description,
+              category: category as DocMetadata['category'],
+              size: stats.size,
+              modified: stats.mtime,
+              icon,
+            });
+          } catch (err) {
+            console.error(`Error processing ${fullPath}:`, err);
+          }
+        }
+      }
     }
+
+    // Start traversal from project root (mark as root to allow .claude directory)
+    await traverseDirectory(docsDir, true);
 
     // Sort by name by default
     docs.sort((a, b) => a.name.localeCompare(b.name));
 
+    console.log(`[getDocumentationList] Found ${docs.length} markdown files in ${projectName}`);
     return docs;
   } catch (error) {
     console.error(`Error reading documentation for ${projectName}:`, error);

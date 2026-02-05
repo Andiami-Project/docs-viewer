@@ -1,51 +1,100 @@
 {
-  "claude-agent-server": {
-    "name": "claude-agent-server",
-    "displayName": "Claude Agent Server",
-    "description": "Claude Agent Server - Workspace Configuration",
-    "category": "workspace",
-    "path": "/home/ubuntu/workspace/claude-agent-server",
-    "icon": "Folder",
-    "tags": [],
-    "autoDetected": true
-  },
-  "doc-automation-hub": {
-    "name": "doc-automation-hub",
-    "displayName": "Doc Automation Hub",
-    "description": "Doc Automation Hub - Documentation",
-    "category": "documentation",
-    "path": "/home/ubuntu/workspace/doc-automation-hub",
-    "icon": "BookOpen",
-    "tags": [],
-    "autoDetected": true
+  "wish-x": {
+    "name": "wish-x",
+    "displayName": "Wish X",
+    "description": "Next.js 15 frontend with React 19, AI-powered chat interface, and real-time streaming. Built with Tailwind CSS, Supabase integration, and Claude AI SDK.",
+    "category": "frontend",
+    "path": "/home/ubuntu/workspace/wish-x",
+    "icon": "Layout",
+    "tags": [
+      "nextjs",
+      "react",
+      "frontend",
+      "ai-chat",
+      "supabase"
+    ],
+    "autoDetected": false
   },
   "wish-backend-x": {
     "name": "wish-backend-x",
     "displayName": "Wish Backend X",
-    "description": "Wish Backend X - Backend Services",
+    "description": "Trigger.dev v4 orchestration backend handling background jobs, AI task routing, and webhook management. Production-ready with comprehensive logging and error handling.",
     "category": "backend",
     "path": "/home/ubuntu/workspace/wish-backend-x",
     "icon": "Server",
-    "tags": [],
-    "autoDetected": true
+    "tags": [
+      "trigger.dev",
+      "backend",
+      "webhooks",
+      "jobs",
+      "api"
+    ],
+    "autoDetected": false
+  },
+  "claude-agent-server": {
+    "name": "claude-agent-server",
+    "displayName": "Claude Agent Server",
+    "description": "WebSocket-based Claude AI agent server with tool execution capabilities. Handles file operations, bash commands, and MCP server integrations for autonomous AI assistance.",
+    "category": "ai-agents",
+    "path": "/home/ubuntu/workspace/claude-agent-server",
+    "icon": "Bot",
+    "tags": [
+      "claude-ai",
+      "agent",
+      "websocket",
+      "tools",
+      "mcp"
+    ],
+    "autoDetected": false
   },
   "workspace-docs": {
     "name": "workspace-docs",
-    "displayName": "Workspace Docs",
-    "description": "Workspace Docs - Documentation",
+    "displayName": "Workspace Documentation",
+    "description": "Comprehensive workspace documentation covering setup, development workflows, deployment, testing strategies, and Git operations. Organized in 8 numbered categories for easy navigation.",
     "category": "documentation",
     "path": "/home/ubuntu/workspace/.claude",
     "icon": "BookOpen",
+    "tags": [
+      "documentation",
+      "guides",
+      "reference",
+      "workflows"
+    ],
+    "autoDetected": false
+  },
+  "doc-automation-hub": {
+    "name": "doc-automation-hub",
+    "displayName": "Doc Automation Hub",
+    "description": "Production webhook service automating documentation generation using Cartographer and Claude AI. Manages multi-project docs with GitHub PR workflows and PM2 deployment.",
+    "category": "infrastructure",
+    "path": "/home/ubuntu/workspace/doc-automation-hub",
+    "icon": "Cloud",
+    "tags": [
+      "automation",
+      "webhooks",
+      "cartographer",
+      "documentation",
+      "devops"
+    ],
+    "autoDetected": false
+  },
+  "workspace-claude-files": {
+    "name": "workspace-claude-files",
+    "displayName": "Workspace Claude Files",
+    "description": "Workspace Claude Files - Workspace Configuration",
+    "category": "workspace",
+    "path": "/home/ubuntu/workspace/.claude",
+    "icon": "Folder",
     "tags": [],
     "autoDetected": true
   },
-  "wish-x": {
-    "name": "wish-x",
-    "displayName": "Wish X",
-    "description": "Wish X - Workspace Configuration",
-    "category": "workspace",
-    "path": "/home/ubuntu/workspace/wish-x",
-    "icon": "Folder",
+  "workspace-documentation": {
+    "name": "workspace-documentation",
+    "displayName": "Workspace Documentation",
+    "description": "Workspace Documentation - Documentation",
+    "category": "documentation",
+    "path": "/home/ubuntu/workspace",
+    "icon": "BookOpen",
     "tags": [],
     "autoDetected": true
   }

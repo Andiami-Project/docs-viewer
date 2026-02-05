@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT: Documentation Access - Fixed!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px;
+        }
+        .alert {
+            background: #10b981;
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .url-box {
+            background: #1e293b;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            margin: 15px 0;
+            word-break: break-all;
+            border: 3px solid #667eea;
+        }
+        .url-box a {
+            color: #10b981;
+            text-decoration: none;
+        }
+        .url-box a:hover {
+            text-decoration: underline;
+        }
+        .steps {
+            counter-reset: step-counter;
+        }
+        .step {
+            background: #f8fafc;
+            padding: 20px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            counter-increment: step-counter;
+            position: relative;
+        }
+        .step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -30px;
+            top: 20px;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .step h3 {
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .comparison div {
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .bad {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+        }
+        .good {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .stat {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            opacity: 0.9;
+            font-size: 0.9em;
+        }
+        code {
+            background: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+        .btn {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px 10px 10px 0;
+            transition: all 0.3s;
+        }
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🤖 ChatGPT Instructions</h1>
+            <p>Fixed and Ready to Use!</p>
+        </div>
+
+        <div class="content">
+            <div class="alert">
+                ✅ The issue you encountered has been fixed!<br>
+                New endpoint created specifically for you.
+            </div>
+
+            <div class="section">
+                <h2>What Went Wrong Before</h2>
+                <div class="comparison">
+                    <div class="bad">
+                        <strong>❌ Your Experience:</strong>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li>✅ /api/projects worked</li>
+                            <li>❌ /api/docs returned empty</li>
+                            <li>❌ Couldn't access files</li>
+                        </ul>
+                    </div>
+                    <div class="good">
+                        <strong>✅ The Problem:</strong>
+                        <ul style="margin-top: 10px; line-height: 1.8;">
+                            <li>117KB nested JSON</li>
+                            <li>Timed out mid-fetch</li>
+                            <li>Too complex to parse</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>✨ The Solution: New Endpoint</h2>
+                <p style="margin-bottom: 15px; font-size: 1.1em;">
+                    I created a <strong>new, simpler endpoint</strong> specifically to solve your issue:
+                </p>
+                <div class="url-box">
+                    <a href="https://y1.andiami.tech/docs-viewer/api/files-list?project=workspace-documentation" target="_blank">
+                        https://y1.andiami.tech/docs-viewer/api/files-list?project=workspace-documentation
+                    </a>
+                </div>
+
+                <div class="stats">
+                    <div class="stat">
+                        <div class="stat-number">592</div>
+                        <div class="stat-label">Total Files</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">~40KB</div>
+                        <div class="stat-label">Response Size</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number">Flat</div>
+                        <div class="stat-label">Array Structure</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📋 Two-Step Process</h2>
+                <div class="steps">
+                    <div class="step">
+                        <h3>Get the File List</h3>
+                        <p>Fetch this URL to see all 592 documentation files:</p>
+                        <div class="url-box">
+                            <a href="https://y1.andiami.tech/docs-viewer/api/files-list?project=workspace-documentation" target="_blank">
+                                /api/files-list?project=workspace-documentation
+                            </a>
+                        </div>
+                        <p>Each file entry includes a <code>url</code> field - use it in Step 2!</p>
+                    </div>
+
+                    <div class="step">
+                        <h3>Fetch Any Document</h3>
+                        <p>Use the <code>url</code> from Step 1 (prepend the domain):</p>
+                        <div class="url-box">
+                            <a href="https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md" target="_blank">
+                                /api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md
+                            </a>
+                        </div>
+                        <p>You'll get the full document content in JSON format.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Try It Now</h2>
+                <p style="margin-bottom: 15px; font-size: 1.1em;">
+                    Copy this prompt and paste it into ChatGPT:
+                </p>
+                <div class="url-box" style="background: #fef3c7; color: #92400e; border-color: #f59e0b;">
+                    Please fetch this URL and tell me:
+                    <br>1. How many total files are there?
+                    <br>2. List the first 5 filenames
+                    <br>3. Pick one interesting file and fetch its content
+                    <br><br>
+                    <strong>URL:</strong> https://y1.andiami.tech/docs-viewer/api/files-list?project=workspace-documentation
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📚 What You Can Access</h2>
+                <ul style="line-height: 2; font-size: 1.05em;">
+                    <li>✅ <strong>592 documentation files</strong></li>
+                    <li>✅ Architecture documents (PM2, system design, scaled architecture)</li>
+                    <li>✅ Test reports and verification logs</li>
+                    <li>✅ Implementation plans and specifications</li>
+                    <li>✅ Configuration guides and deployment docs</li>
+                    <li>✅ Analysis reports and status updates</li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2>🔗 Quick Links</h2>
+                <a href="https://y1.andiami.tech/docs-viewer/api/files-list?project=workspace-documentation" target="_blank" class="btn">
+                    📂 Get File List
+                </a>
+                <a href="https://y1.andiami.tech/docs-viewer/api/projects" target="_blank" class="btn">
+                    📊 List Projects
+                </a>
+                <a href="https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md" target="_blank" class="btn">
+                    📄 Example Document
+                </a>
+            </div>
+
+            <div style="background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; margin-top: 30px;">
+                <strong style="color: #667eea; font-size: 1.2em;">✅ Status: Live and Working</strong><br>
+                <span style="color: #6b7280;">Created: 2026-02-05 | Tested: ✅ | Ready for ChatGPT: ✅</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

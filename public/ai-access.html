@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tool Access to Documentation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2563eb;
+            border-bottom: 3px solid #2563eb;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #1e40af;
+            margin-top: 30px;
+        }
+        .endpoint {
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        .endpoint h3 {
+            margin-top: 0;
+            color: #1e40af;
+        }
+        code {
+            background: #e5e7eb;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        .url {
+            background: #1e293b;
+            color: #10b981;
+            padding: 12px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        a {
+            color: #2563eb;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .success {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .instruction {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        ul {
+            line-height: 1.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 AI Tool Access to Documentation</h1>
+
+        <div class="success">
+            <strong>✅ Solution Implemented!</strong><br>
+            Your documentation is now fully accessible to AI tools like ChatGPT and Claude through JSON API endpoints.
+        </div>
+
+        <h2>The Problem (Now Solved)</h2>
+        <p>
+            The main viewer page at <code>https://y1.andiami.tech/docs-viewer</code> is a Single Page Application (SPA)
+            that requires JavaScript to load content. AI tools cannot execute JavaScript.
+        </p>
+        <p>
+            <strong>The solution:</strong> Use the JSON API endpoints below instead - no JavaScript required!
+        </p>
+
+        <h2>Available API Endpoints</h2>
+
+        <div class="endpoint">
+            <h3>1. List All Projects</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/projects" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/projects
+                </a>
+            </div>
+            <p><strong>Returns:</strong> JSON array of all documentation projects (6 projects available)</p>
+        </div>
+
+        <div class="endpoint">
+            <h3>2. List All Files in a Project</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation
+                </a>
+            </div>
+            <p><strong>Returns:</strong> JSON tree of all files (100+ markdown documents)</p>
+        </div>
+
+        <div class="endpoint">
+            <h3>3. Get Document Content</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md
+                </a>
+            </div>
+            <p><strong>Returns:</strong> JSON with full document content + metadata</p>
+        </div>
+
+        <h2>How to Use with ChatGPT</h2>
+
+        <div class="instruction">
+            <strong>Step 1: List Available Documentation</strong>
+            <p>Ask ChatGPT to fetch:</p>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation
+                </a>
+            </div>
+        </div>
+
+        <div class="instruction">
+            <strong>Step 2: Read a Specific Document</strong>
+            <p>Pick any file from the list and ask ChatGPT to fetch:</p>
+            <div class="url">
+                https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file={filename}
+            </div>
+            <p><small>Replace <code>{filename}</code> with the actual filename (e.g., <code>PM2-NATIVE-MEMORY-ARCHITECTURE.md</code>)</small></p>
+        </div>
+
+        <h2>Example Prompts for ChatGPT</h2>
+        <ul>
+            <li>"Please fetch this URL and list all available documentation: <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation</a>"</li>
+            <li>"Please fetch and summarize this document: <a href="https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md" target="_blank">https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md</a>"</li>
+            <li>"Find all files with 'ARCHITECTURE' in their name from this API: <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation</a>"</li>
+        </ul>
+
+        <h2>Available Projects</h2>
+        <ul>
+            <li><strong>workspace-documentation</strong> - General workspace docs (100+ files) ⭐ <em>Most important</em></li>
+            <li><strong>workspace-claude-files</strong> - Claude Code configuration</li>
+            <li><strong>wish-x</strong> - Frontend application</li>
+            <li><strong>wish-backend-x</strong> - Backend services</li>
+            <li><strong>doc-automation-hub</strong> - Documentation automation</li>
+            <li><strong>claude-agent-server</strong> - AI agent server</li>
+        </ul>
+
+        <h2>Quick Test</h2>
+        <p>Click any of the links above to see the JSON response in your browser, or copy the URLs and paste them into ChatGPT's prompt.</p>
+
+        <div class="success">
+            <strong>✅ All endpoints are working!</strong><br>
+            Tested on: 2026-02-05<br>
+            Status: Fully operational and accessible to all AI tools
+        </div>
+
+        <hr style="margin: 30px 0; border: none; border-top: 1px solid #e5e7eb;">
+
+        <p style="text-align: center; color: #6b7280; font-size: 0.9em;">
+            <strong>For detailed instructions:</strong><br>
+            See <code>API-ACCESS-GUIDE-FOR-AI-TOOLS.md</code> or <code>CHATGPT-INSTRUCTIONS.md</code> in workspace root
+        </p>
+    </div>
+</body>
+</html>

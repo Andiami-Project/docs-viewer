@@ -7,13 +7,20 @@ import { PROJECT_ROOTS, VALID_PROJECT_NAMES } from './project-config';
 const SKIP_DIRECTORIES = new Set([
   'node_modules', '.git', '.next', 'dist', 'build',
   'out', '.vercel', '.turbo', 'coverage',
+  '.claude', // Exclude .claude from workspace-documentation (handled by workspace-claude-files)
+  '.omc', '.chat-analysis', '.playwright-mcp', // Exclude other hidden directories
 ]);
 
 // Static project metadata (no API dependency)
 const PROJECT_INFO: Record<string, { displayName: string; description: string; category: string }> = {
-  'workspace-docs': {
+  'workspace-claude-files': {
+    displayName: 'Workspace Claude Files',
+    description: 'Claude Code configuration, CLAUDE.md, skills, and MCP servers',
+    category: 'infrastructure',
+  },
+  'workspace-documentation': {
     displayName: 'Workspace Documentation',
-    description: 'Comprehensive documentation for the entire workspace',
+    description: 'General workspace documentation, architecture, reports, and analysis',
     category: 'infrastructure',
   },
   'wish-x': {
@@ -134,6 +141,9 @@ function getAllMarkdownFiles(dir: string): string[] {
   let skippedCount = 0;
   let foundCount = 0;
 
+  // Check if this is workspace root (for special filtering)
+  const isWorkspaceRoot = dir === '/home/ubuntu/workspace';
+
   function traverse(currentPath: string, depth: number = 0) {
     try {
       const entries = fs.readdirSync(currentPath, { withFileTypes: true });
@@ -150,6 +160,12 @@ function getAllMarkdownFiles(dir: string): string[] {
         if (entry.isDirectory()) {
           traverse(fullPath, depth + 1);
         } else if (entry.isFile() && entry.name.endsWith('.md')) {
+          // Skip temporary/dotfiles ONLY in workspace root
+          if (isWorkspaceRoot && depth === 0 && entry.name.startsWith('.')) {
+            skippedCount++;
+            continue;
+          }
+
           files.push(fullPath);
           foundCount++;
         }

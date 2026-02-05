@@ -4,7 +4,8 @@
  */
 
 export const PROJECT_ROOTS: Record<string, string> = {
-  'workspace-docs': '/home/ubuntu/workspace/.claude',
+  'workspace-claude-files': '/home/ubuntu/workspace/.claude',
+  'workspace-documentation': '/home/ubuntu/workspace',
   'wish-x': '/home/ubuntu/workspace/wish-x',
   'wish-backend-x': '/home/ubuntu/workspace/wish-backend-x',
   'doc-automation-hub': '/home/ubuntu/workspace/doc-automation-hub',

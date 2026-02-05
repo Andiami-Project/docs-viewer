@@ -304,3 +304,149 @@ body {
   opacity: 0.7;
   text-decoration: none;
 }
+
+/* Syntax Highlighting Theme (Night Owl inspired for dark mode) */
+.prose pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0;
+}
+
+/* Base styles */
+.prose code.hljs {
+  color: #d6deeb;
+}
+
+/* Keywords */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+  color: #c792ea;
+}
+
+/* Strings */
+.hljs-string {
+  color: #ecc48d;
+}
+
+/* Numbers */
+.hljs-number {
+  color: #f78c6c;
+}
+
+/* Functions */
+.hljs-title,
+.hljs-function .hljs-title,
+.hljs-title.function_,
+.hljs-built_in {
+  color: #82aaff;
+}
+
+/* Variables and properties */
+.hljs-variable,
+.hljs-property,
+.hljs-attribute {
+  color: #addb67;
+}
+
+/* Comments */
+.hljs-comment,
+.hljs-quote {
+  color: #637777;
+  font-style: italic;
+}
+
+/* Types */
+.hljs-type,
+.hljs-class .hljs-title {
+  color: #ffcb8b;
+}
+
+/* Operators */
+.hljs-operator,
+.hljs-punctuation {
+  color: #c792ea;
+}
+
+/* RegExp */
+.hljs-regexp {
+  color: #5ca7e4;
+}
+
+/* Meta (JSX tags, decorators) */
+.hljs-meta,
+.hljs-tag {
+  color: #7fdbca;
+}
+
+/* Additions (git diff) */
+.hljs-addition {
+  color: #addb67;
+  background-color: rgba(173, 219, 103, 0.15);
+}
+
+/* Deletions (git diff) */
+.hljs-deletion {
+  color: #ef5350;
+  background-color: rgba(239, 83, 80, 0.15);
+}
+
+/* Emphasis */
+.hljs-emphasis {
+  font-style: italic;
+}
+
+/* Strong */
+.hljs-strong {
+  font-weight: bold;
+}
+
+/* Template strings */
+.hljs-template-variable,
+.hljs-template-tag {
+  color: #addb67;
+}
+
+/* Symbols */
+.hljs-symbol,
+.hljs-bullet,
+.hljs-name {
+  color: #82aaff;
+}
+
+/* Sections */
+.hljs-section {
+  color: #82aaff;
+  font-weight: bold;
+}
+
+/* Selectors (CSS) */
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+  color: #c792ea;
+}
+
+/* Attributes (HTML) */
+.hljs-attr {
+  color: #addb67;
+}
+
+/* Documentation */
+.hljs-doctag {
+  color: #7fdbca;
+}
+
+/* Better readability for inline code in dark mode */
+.prose.prose-invert :not(pre) > code {
+  background-color: rgba(30, 41, 59, 0.8);
+  color: #fbbf24;
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  font-size: 0.875em;
+  font-weight: 500;
+}

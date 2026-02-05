@@ -128,7 +128,7 @@ export default function HomePage() {
             </p>
 
             {/* Download All Button */}
-            <div className="flex justify-center">
+            <div className="flex justify-center gap-4">
               <button
                 onClick={downloadAllDocs}
                 disabled={downloading}
@@ -137,6 +137,21 @@ export default function HomePage() {
                 <Download className="w-5 h-5" />
                 {downloading ? 'Generating Archive...' : 'Download All Documentation'}
               </button>
+
+              {/* AI Docs Index Link */}
+              <Link
+                href="/ai-crawl"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500/10 border border-blue-500/30 text-blue-400 font-semibold rounded-lg hover:bg-blue-500/20 hover:border-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-slate-900 transition-all duration-200"
+              >
+                <FileText className="w-5 h-5" />
+                AI Tools Index
+              </Link>
+            </div>
+
+            {/* Plain text URL for AI tools */}
+            <div style={{display: 'none'}} aria-hidden="true">
+              AI documentation index: https://y1.andiami.tech/docs-viewer/ai-crawl
+              Complete sitemap: https://y1.andiami.tech/docs-viewer/sitemap.txt
             </div>
           </div>
         </div>
@@ -353,8 +368,147 @@ export default function HomePage() {
         )}
       </main>
 
+      {/* AI Accessibility Section - URL Index for Web Crawlers */}
+      <section className="border-t border-slate-800 bg-slate-900/30">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold mb-4 text-center text-slate-300">
+              📋 Documentation Index for AI Tools
+            </h2>
+            <p className="text-center text-slate-400 mb-8">
+              Complete URL listing for AI assistants and web crawlers to discover all documentation pages
+            </p>
+
+            {/* Sitemap Link - Prominent */}
+            <div className="bg-slate-800/50 border border-amber-500/30 rounded-xl p-6 mb-8">
+              <div className="flex items-start gap-4">
+                <FileText className="w-6 h-6 text-amber-400 flex-shrink-0 mt-1" />
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-slate-100 mb-2">Complete Sitemap</h3>
+                  <p className="text-sm text-slate-400 mb-3">
+                    Full list of all 898 documentation pages (updated automatically)
+                  </p>
+                  <div className="bg-slate-900/50 rounded-lg p-3 border border-slate-700">
+                    <code className="text-sm text-amber-400 break-all">
+                      https://y1.andiami.tech/docs-viewer/sitemap.txt
+                    </code>
+                  </div>
+                  <div className="mt-3">
+                    <a
+                      href="/sitemap.txt"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-sm text-amber-400 hover:text-amber-300 transition-colors"
+                    >
+                      View Sitemap →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Main Documentation URLs */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-slate-300 mb-3">Main Documentation Pages:</h3>
+
+              <div className="grid gap-3">
+                {/* Homepage */}
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-1">Documentation Hub</div>
+                  <code className="text-xs text-blue-400 break-all">
+                    https://y1.andiami.tech/docs-viewer
+                  </code>
+                </div>
+
+                {/* Project URLs */}
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-2">Frontend Layer (wish-x)</div>
+                  <code className="text-xs text-blue-400 break-all">
+                    https://y1.andiami.tech/docs-viewer/project/wish-x/docs-list
+                  </code>
+                </div>
+
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-2">Backend Layer (wish-backend-x)</div>
+                  <code className="text-xs text-amber-400 break-all">
+                    https://y1.andiami.tech/docs-viewer/project/wish-backend-x/docs-list
+                  </code>
+                </div>
+
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-2">Agent Layer (claude-agent-server)</div>
+                  <code className="text-xs text-purple-400 break-all">
+                    https://y1.andiami.tech/docs-viewer/project/claude-agent-server/docs-list
+                  </code>
+                </div>
+
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-2">Workspace Claude Files</div>
+                  <code className="text-xs text-green-400 break-all">
+                    https://y1.andiami.tech/docs-viewer/project/workspace-claude-files/docs-list
+                  </code>
+                </div>
+
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-2">Workspace Documentation</div>
+                  <code className="text-xs text-green-400 break-all">
+                    https://y1.andiami.tech/docs-viewer/project/workspace-documentation/docs-list
+                  </code>
+                </div>
+
+                <div className="bg-slate-800/30 rounded-lg p-4 border border-slate-700">
+                  <div className="text-sm text-slate-400 mb-2">Documentation Hub</div>
+                  <code className="text-xs text-slate-400 break-all">
+                    https://y1.andiami.tech/docs-viewer/project/doc-automation-hub/docs-list
+                  </code>
+                </div>
+              </div>
+
+              {/* API Endpoints */}
+              <div className="mt-6">
+                <h3 className="text-lg font-semibold text-slate-300 mb-3">API Endpoints:</h3>
+                <div className="space-y-2">
+                  <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700">
+                    <div className="text-xs text-slate-400 mb-1">Get All Projects</div>
+                    <code className="text-xs text-slate-300 break-all">
+                      https://y1.andiami.tech/docs-viewer/api/projects
+                    </code>
+                  </div>
+
+                  <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700">
+                    <div className="text-xs text-slate-400 mb-1">Get Files List (Flat)</div>
+                    <code className="text-xs text-slate-300 break-all">
+                      https://y1.andiami.tech/docs-viewer/api/files-list?project=workspace-documentation
+                    </code>
+                  </div>
+
+                  <div className="bg-slate-800/30 rounded-lg p-3 border border-slate-700">
+                    <div className="text-xs text-slate-400 mb-1">Get Document Tree</div>
+                    <code className="text-xs text-slate-300 break-all">
+                      https://y1.andiami.tech/docs-viewer/api/docs?project=wish-x
+                    </code>
+                  </div>
+                </div>
+              </div>
+
+              {/* Usage Instructions */}
+              <div className="mt-8 bg-blue-500/10 border border-blue-500/30 rounded-lg p-4">
+                <h4 className="text-sm font-semibold text-blue-400 mb-2">For AI Tools & Web Crawlers:</h4>
+                <ol className="text-xs text-slate-400 space-y-1 list-decimal list-inside">
+                  <li>Fetch sitemap.txt to get complete URL list</li>
+                  <li>Each documentation page is server-side rendered (SSR)</li>
+                  <li>All pages return full HTML content without JavaScript</li>
+                  <li>Use /api/files-list for flat JSON structure of files</li>
+                  <li>Use /api/docs for nested tree structure</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="border-t border-slate-800 bg-slate-900/50 mt-20">
+      <footer className="border-t border-slate-800 bg-slate-900/50">
         <div className="max-w-7xl mx-auto px-6 py-8">
           <div className="text-center">
             <p className="text-sm text-slate-400 mb-1">

@@ -2,33 +2,23 @@
 > docs-viewer@0.1.0 build
 > next build
 
-▲ Next.js 16.1.4 (Turbopack)
+⚠ You are using a non-standard "NODE_ENV" value in your environment. This creates inconsistencies in the project and is strongly advised against. Read more: https://nextjs.org/docs/messages/non-standard-node-env
+▲ Next.js 16.1.6 (Turbopack)
 
   Creating an optimized production build ...
-✓ Compiled successfully in 5.4s
+✓ Compiled successfully in 9.9s
   Running TypeScript ...
-  Collecting page data using 7 workers ...
-  Generating static pages using 7 workers (0/9) ...
-  Generating static pages using 7 workers (2/9) 
-  Generating static pages using 7 workers (4/9) 
-  Generating static pages using 7 workers (6/9) 
-✓ Generating static pages using 7 workers (9/9) in 419.3ms
-  Finalizing page optimization ...
+Failed to compile.
 
-Route (app)
-┌ ○ /
-├ ○ /_not-found
-├ ƒ /api/content
-├ ƒ /api/docs
-├ ƒ /api/docs-list
-├ ƒ /api/projects
-├ ƒ /project/[projectName]
-├ ƒ /project/[projectName]/docs-list-old
-├ ƒ /project/[projectName]/docs-list/[[...slug]]
-├ ƒ /project/[projectName]/docs/[...slug]
-└ ○ /viewer
+./app/api/download/route.ts:103:29
+Type error: Argument of type 'Uint8Array<ArrayBufferLike>' is not assignable to parameter of type 'BodyInit | null | undefined'.
+  Type 'Uint8Array<ArrayBufferLike>' is missing the following properties from type 'URLSearchParams': size, append, delete, get, and 2 more.
 
-
-○  (Static)   prerendered as static content
-ƒ  (Dynamic)  server-rendered on demand
-
+[0m [90m 101 |[39m
+ [90m 102 |[39m     [90m// Return the ZIP file[39m
+[31m[1m>[22m[39m[90m 103 |[39m     [36mreturn[39m [36mnew[39m [33mNextResponse[39m(zipContent[33m,[39m {
+ [90m     |[39m                             [31m[1m^[22m[39m
+ [90m 104 |[39m       headers[33m:[39m {
+ [90m 105 |[39m         [32m'Content-Type'[39m[33m:[39m [32m'application/zip'[39m[33m,[39m
+ [90m 106 |[39m         [32m'Content-Disposition'[39m[33m:[39m [32m`attachment; filename="as-you-wish-docs-${new Date().toISOString().split('T')[0]}.zip"`[39m[33m,[39m[0m
+Next.js build worker exited with code: 1 and signal: null
