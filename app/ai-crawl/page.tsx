@@ -6,6 +6,8 @@ export default function AICrawlPage() {
 
   // All URLs as simple constants
   const urls = {
+    aiAll: `${baseUrl}/api/ai-all`,
+    llmsTxt: `${baseUrl}/llms.txt`,
     sitemap: `${baseUrl}/sitemap.txt`,
     hub: baseUrl,
     projects: [
@@ -17,6 +19,10 @@ export default function AICrawlPage() {
       { name: 'Documentation Automation Hub', url: `${baseUrl}/project/doc-automation-hub/docs-list` },
     ],
     apis: [
+      { name: '⭐ Get ALL Docs Content (Best for AI)', url: `${baseUrl}/api/ai-all`, highlight: true },
+      { name: 'LLMs Config File', url: `${baseUrl}/llms.txt` },
+      { name: 'Get Single Project Bulk', url: `${baseUrl}/api/ai-all?project=workspace-documentation` },
+      { name: 'Search Documentation', url: `${baseUrl}/api/ai-docs?search=authentication` },
       { name: 'Get All Projects', url: `${baseUrl}/api/projects` },
       { name: 'Get Files List (Flat)', url: `${baseUrl}/api/files-list?project=workspace-documentation` },
       { name: 'Get Document Tree', url: `${baseUrl}/api/docs?project=wish-x` },
@@ -111,7 +117,24 @@ export default function AICrawlPage() {
             All 898 documentation pages in the As You Wish Ecosystem.
           </p>
 
-          {/* Sitemap - Most Important */}
+          {/* AI All-in-One - MOST Important */}
+          <div className="sitemap-box" style={{background: '#065f46', borderColor: '#10b981'}}>
+            <h2>⭐ GET ALL CONTENT IN ONE REQUEST (Recommended)</h2>
+            <p>Fetch this URL to get complete content of ALL documents in a single JSON:</p>
+            <div className="sitemap-url" style={{color: '#10b981'}}>{urls.aiAll}</div>
+            <p style={{marginTop: '1rem', fontSize: '0.9rem', color: '#a7f3d0'}}>
+              This solves the "inner page access" problem - everything in one response!
+            </p>
+          </div>
+
+          {/* LLMs.txt */}
+          <div className="url-box" style={{background: '#1e3a8a', borderColor: '#3b82f6'}}>
+            <h3 style={{color: '#93c5fd'}}>📋 LLM Configuration File</h3>
+            <div className="url" style={{color: '#93c5fd'}}>{urls.llmsTxt}</div>
+            <p style={{color: '#bfdbfe', fontSize: '0.85rem', marginTop: '0.5rem'}}>Instructions for AI tools on how to access documentation</p>
+          </div>
+
+          {/* Sitemap */}
           <div className="sitemap-box">
             <h2>Complete Sitemap (898 pages)</h2>
             <p>Fetch this URL to get all documentation page URLs:</p>
@@ -135,10 +158,10 @@ export default function AICrawlPage() {
 
           {/* API Endpoints */}
           <h2>API Endpoints</h2>
-          {urls.apis.map(api => (
-            <div key={api.url} className="url-box">
-              <h3>{api.name}</h3>
-              <div className="url">{api.url}</div>
+          {urls.apis.map((api: { name: string; url: string; highlight?: boolean }) => (
+            <div key={api.url} className="url-box" style={api.highlight ? {background: '#065f46', borderColor: '#10b981'} : undefined}>
+              <h3 style={api.highlight ? {color: '#10b981'} : undefined}>{api.name}</h3>
+              <div className="url" style={api.highlight ? {color: '#10b981'} : undefined}>{api.url}</div>
             </div>
           ))}
 
@@ -146,11 +169,13 @@ export default function AICrawlPage() {
           <div className="info-box">
             <h2>For AI Tools & Web Crawlers</h2>
             <ul>
-              <li>Fetch {urls.sitemap} to get complete URL list</li>
+              <li><strong>RECOMMENDED:</strong> Fetch {urls.aiAll} to get ALL content in one request</li>
+              <li>Or fetch {urls.llmsTxt} for access instructions</li>
+              <li>Fetch {urls.sitemap} to get complete URL list (898 pages)</li>
               <li>Each documentation page is server-side rendered (SSR)</li>
               <li>All pages return full HTML content without JavaScript</li>
-              <li>Use /api/files-list for flat JSON structure</li>
-              <li>Use /api/docs for nested tree structure</li>
+              <li>Use /api/ai-all?project=name for single project bulk content</li>
+              <li>Use /api/ai-docs?search=query to search across all docs</li>
               <li>Direct page access: /project/[projectName]/docs/[...path]</li>
             </ul>
           </div>

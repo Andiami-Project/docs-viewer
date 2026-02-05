@@ -18,6 +18,43 @@ export default function AIDocsIndexPage() {
           Complete URL listing for AI assistants and web crawlers to discover all documentation pages in the As You Wish Ecosystem.
         </p>
 
+        {/* AI All-in-One - Most Important */}
+        <section className="mb-12 bg-emerald-900/30 border-2 border-emerald-500 rounded-lg p-6">
+          <h2 className="text-2xl font-bold mb-4 text-emerald-400">⭐ GET ALL CONTENT IN ONE REQUEST (Recommended)</h2>
+          <p className="text-slate-300 mb-4">
+            Get complete content of ALL documents in a single JSON response:
+          </p>
+          <div className="bg-slate-900 rounded-lg p-4 mb-2">
+            <p className="text-emerald-300 text-xl font-mono font-bold">
+              {baseUrl}/api/ai-all
+            </p>
+          </div>
+          <p className="text-emerald-200 mt-4">
+            This solves the "inner page access" problem - everything in one response!
+          </p>
+          <div className="mt-4 text-sm text-slate-400">
+            <p>Options:</p>
+            <ul className="list-disc list-inside mt-2 space-y-1">
+              <li><code className="bg-slate-800 px-2 py-0.5 rounded">?project=workspace-documentation</code> - Single project only</li>
+              <li><code className="bg-slate-800 px-2 py-0.5 rounded">?limit=50</code> - Limit number of documents</li>
+              <li><code className="bg-slate-800 px-2 py-0.5 rounded">?summary=true</code> - Metadata only, no content</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* LLMs.txt */}
+        <section className="mb-12">
+          <h2 className="text-2xl font-bold mb-4 text-blue-400">📋 LLM Configuration File</h2>
+          <p className="text-slate-400 mb-4">
+            Standard instructions file for AI tools (like robots.txt but for LLMs):
+          </p>
+          <div className="bg-slate-900 rounded-lg p-4 mb-2">
+            <p className="text-blue-300 text-lg font-mono">
+              {baseUrl}/llms.txt
+            </p>
+          </div>
+        </section>
+
         {/* Sitemap URL */}
         <section className="mb-12">
           <h2 className="text-2xl font-bold mb-4 text-amber-400">Complete Sitemap</h2>
@@ -88,6 +125,24 @@ export default function AIDocsIndexPage() {
           <h2 className="text-2xl font-bold mb-4 text-amber-400">API Endpoints</h2>
           <div className="space-y-4">
 
+            <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-emerald-300 mb-2">⭐ Get ALL Content (Best for AI)</h3>
+              <p className="text-emerald-200 font-mono">{baseUrl}/api/ai-all</p>
+              <p className="text-sm text-slate-400 mt-1">Returns complete content of all documents in one JSON</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-200 mb-2">Get Single Project (Bulk)</h3>
+              <p className="text-slate-300 font-mono">{baseUrl}/api/ai-all?project=workspace-documentation</p>
+              <p className="text-sm text-slate-400 mt-1">Returns all documents with content for one project</p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-semibold text-slate-200 mb-2">Search Documentation</h3>
+              <p className="text-slate-300 font-mono">{baseUrl}/api/ai-docs?search=authentication</p>
+              <p className="text-sm text-slate-400 mt-1">Search across all documentation with context snippets</p>
+            </div>
+
             <div>
               <h3 className="text-lg font-semibold text-slate-200 mb-2">Get All Projects</h3>
               <p className="text-slate-300 font-mono">{baseUrl}/api/projects</p>
@@ -113,11 +168,13 @@ export default function AIDocsIndexPage() {
         <section className="mb-12 bg-blue-900/20 border border-blue-500/30 rounded-lg p-6">
           <h2 className="text-2xl font-bold mb-4 text-blue-400">For AI Tools & Web Crawlers</h2>
           <ol className="list-decimal list-inside space-y-2 text-slate-300">
+            <li><strong className="text-emerald-300">RECOMMENDED:</strong> Fetch {baseUrl}/api/ai-all to get ALL content in one request</li>
+            <li>Or fetch {baseUrl}/llms.txt for access instructions</li>
             <li>Fetch {baseUrl}/sitemap.txt to get complete URL list (898 pages)</li>
             <li>Each documentation page is server-side rendered (SSR)</li>
             <li>All pages return full HTML content without requiring JavaScript</li>
-            <li>Use /api/files-list for flat JSON structure of files</li>
-            <li>Use /api/docs for nested tree structure</li>
+            <li>Use /api/ai-all?project=name for single project bulk content</li>
+            <li>Use /api/ai-docs?search=query to search across all docs</li>
             <li>Direct page access works: /project/[projectName]/docs/[...path]</li>
           </ol>
         </section>

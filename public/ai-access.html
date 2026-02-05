@@ -101,10 +101,53 @@
             <strong>The solution:</strong> Use the JSON API endpoints below instead - no JavaScript required!
         </p>
 
+        <h2>🚀 Quick Access for AI Tools (Recommended)</h2>
+        
+        <div class="endpoint" style="background: #fef3c7; border-left-color: #f59e0b;">
+            <h3>⭐ Get ALL Documentation in ONE Request</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-all" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-all
+                </a>
+            </div>
+            <p><strong>Returns:</strong> Complete content of ALL documents in a single JSON response. Perfect for AI tools!</p>
+        </div>
+
+        <div class="endpoint" style="background: #dbeafe; border-left-color: #3b82f6;">
+            <h3>📋 LLM Configuration File</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/llms.txt" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/llms.txt
+                </a>
+            </div>
+            <p><strong>Returns:</strong> Plain text instructions for AI tools on how to access documentation</p>
+        </div>
+
         <h2>Available API Endpoints</h2>
 
         <div class="endpoint">
-            <h3>1. List All Projects</h3>
+            <h3>1. Get ALL Content (Best for AI)</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-all" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-all
+                </a>
+            </div>
+            <p><strong>Returns:</strong> All documents with full content in one JSON response</p>
+            <p><small>Options: <code>?project=name</code> for single project, <code>?limit=50</code> to limit docs, <code>?summary=true</code> for metadata only</small></p>
+        </div>
+
+        <div class="endpoint">
+            <h3>2. Get Project Docs with Content</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-docs?project=workspace-documentation&bulk=true" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-docs?project=workspace-documentation&bulk=true
+                </a>
+            </div>
+            <p><strong>Returns:</strong> All files with full content for a specific project</p>
+        </div>
+
+        <div class="endpoint">
+            <h3>3. List All Projects</h3>
             <div class="url">
                 <a href="https://y1.andiami.tech/docs-viewer/api/projects" target="_blank">
                     https://y1.andiami.tech/docs-viewer/api/projects
@@ -114,7 +157,7 @@
         </div>
 
         <div class="endpoint">
-            <h3>2. List All Files in a Project</h3>
+            <h3>4. List All Files in a Project</h3>
             <div class="url">
                 <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">
                     https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation
@@ -124,7 +167,7 @@
         </div>
 
         <div class="endpoint">
-            <h3>3. Get Document Content</h3>
+            <h3>5. Get Single Document Content</h3>
             <div class="url">
                 <a href="https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md" target="_blank">
                     https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md
@@ -133,32 +176,55 @@
             <p><strong>Returns:</strong> JSON with full document content + metadata</p>
         </div>
 
-        <h2>How to Use with ChatGPT</h2>
+        <div class="endpoint">
+            <h3>6. Search Across All Projects</h3>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-docs?search=authentication" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-docs?search=authentication
+                </a>
+            </div>
+            <p><strong>Returns:</strong> Search results with context snippets across all documentation</p>
+        </div>
+
+        <h2>How to Use with ChatGPT / Claude</h2>
+
+        <div class="instruction" style="background: #d1fae5; border-left-color: #10b981;">
+            <strong>🎯 Easiest Method: Get Everything at Once</strong>
+            <p>Just ask the AI to fetch this single URL to get ALL documentation:</p>
+            <div class="url">
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-all" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-all
+                </a>
+            </div>
+            <p><small>This returns complete content of every document. No need for multiple fetches!</small></p>
+        </div>
 
         <div class="instruction">
-            <strong>Step 1: List Available Documentation</strong>
-            <p>Ask ChatGPT to fetch:</p>
+            <strong>Alternative: Get a Specific Project's Docs</strong>
+            <p>For a single project with all content included:</p>
             <div class="url">
-                <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">
-                    https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-all?project=workspace-documentation" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-all?project=workspace-documentation
                 </a>
             </div>
         </div>
 
         <div class="instruction">
-            <strong>Step 2: Read a Specific Document</strong>
-            <p>Pick any file from the list and ask ChatGPT to fetch:</p>
+            <strong>Search for Specific Topics</strong>
+            <p>Search across all documentation:</p>
             <div class="url">
-                https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file={filename}
+                <a href="https://y1.andiami.tech/docs-viewer/api/ai-docs?search=authentication" target="_blank">
+                    https://y1.andiami.tech/docs-viewer/api/ai-docs?search=authentication
+                </a>
             </div>
-            <p><small>Replace <code>{filename}</code> with the actual filename (e.g., <code>PM2-NATIVE-MEMORY-ARCHITECTURE.md</code>)</small></p>
         </div>
 
-        <h2>Example Prompts for ChatGPT</h2>
+        <h2>Example Prompts for AI Assistants</h2>
         <ul>
-            <li>"Please fetch this URL and list all available documentation: <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation</a>"</li>
-            <li>"Please fetch and summarize this document: <a href="https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md" target="_blank">https://y1.andiami.tech/docs-viewer/api/content?project=workspace-documentation&file=PM2-NATIVE-MEMORY-ARCHITECTURE.md</a>"</li>
-            <li>"Find all files with 'ARCHITECTURE' in their name from this API: <a href="https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation" target="_blank">https://y1.andiami.tech/docs-viewer/api/docs?project=workspace-documentation</a>"</li>
+            <li>"Please fetch all documentation from: <a href="https://y1.andiami.tech/docs-viewer/api/ai-all" target="_blank">https://y1.andiami.tech/docs-viewer/api/ai-all</a>"</li>
+            <li>"Get the workspace documentation: <a href="https://y1.andiami.tech/docs-viewer/api/ai-all?project=workspace-documentation" target="_blank">https://y1.andiami.tech/docs-viewer/api/ai-all?project=workspace-documentation</a>"</li>
+            <li>"Search for 'API' in the docs: <a href="https://y1.andiami.tech/docs-viewer/api/ai-docs?search=API" target="_blank">https://y1.andiami.tech/docs-viewer/api/ai-docs?search=API</a>"</li>
+            <li>"Check the llms.txt file: <a href="https://y1.andiami.tech/docs-viewer/llms.txt" target="_blank">https://y1.andiami.tech/docs-viewer/llms.txt</a>"</li>
         </ul>
 
         <h2>Available Projects</h2>
