@@ -26,3 +26,6 @@ docs/workspace-claude-documentation/
 .next/
 next-env.d.ts
 tsconfig.tsbuildinfo
+docs/doc-automation-hub/
+docs/workspace-claude-files/
+docs/workspace-documentation/
