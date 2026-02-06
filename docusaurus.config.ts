@@ -9,11 +9,15 @@ const config: Config = {
   url: 'https://y1.andiami.tech',
   baseUrl: '/docs-viewer/',
   onBrokenLinks: 'warn',
+  onBrokenAnchors: 'warn',
   i18n: { defaultLocale: 'en', locales: ['en'] },
   
-  // Use plain markdown, not MDX
   markdown: {
     format: 'md',
+    hooks: {
+      onBrokenMarkdownImages: 'warn',
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   presets: [

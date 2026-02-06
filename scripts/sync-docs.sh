@@ -7,7 +7,9 @@ declare -A SOURCES
 SOURCES["wish-x"]="/home/ubuntu/workspace/wish-x"
 SOURCES["wish-backend-x"]="/home/ubuntu/workspace/wish-backend-x"
 SOURCES["claude-agent-server"]="/home/ubuntu/workspace/claude-agent-server"
-SOURCES["workspace-claude-documentation"]="/home/ubuntu/workspace/.claude"
+SOURCES["workspace-claude-files"]="/home/ubuntu/workspace/.claude"
+SOURCES["doc-automation-hub"]="/home/ubuntu/workspace/doc-automation-hub"
+SOURCES["workspace-documentation"]="/home/ubuntu/workspace"
 
 for project in "${!SOURCES[@]}"; do
     src="${SOURCES[$project]}"
@@ -17,7 +19,9 @@ for project in "${!SOURCES[@]}"; do
     [ -d "$src" ] && rsync -av --delete \
         --exclude='node_modules' --exclude='.git' --exclude='.next' \
         --exclude='dist' --exclude='build' --exclude='.trigger' \
-        --exclude='.omc' --exclude='.chat-analysis' \
+        --exclude='.omc' --exclude='.chat-analysis' --exclude='docs-viewer' \
+        --exclude='.claude' --exclude='wish-x' --exclude='wish-backend-x' \
+        --exclude='claude-agent-server' --exclude='doc-automation-hub' \
         --include='*/' --include='*.md' --exclude='*' \
         "$src/" "$dest/"
 done
