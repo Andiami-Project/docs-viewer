@@ -25,3 +25,4 @@ docs/claude-agent-server/
 docs/workspace-claude-documentation/
 .next/
 next-env.d.ts
+tsconfig.tsbuildinfo
