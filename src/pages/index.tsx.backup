@@ -38,11 +38,19 @@ const projects = [
   },
   {
     name: 'workspace-claude-files',
-    title: 'Configuration & References',
-    description: 'Claude Code instructions + implementation docs',
-    details: '→ Contains CLAUDE.md (Global Instructions) and 149 implementation docs\n→ Start here if: Understanding development guidelines or looking for implementation examples',
+    title: 'Configuration',
+    description: 'Claude Code instructions',
+    details: '→ Contains CLAUDE.md (Global Instructions)\n→ Start here if: Understanding development guidelines',
     setupTime: '⏱️ 5-10 min (reading)',
     link: '/workspace-claude-files',
+  },
+  {
+    name: 'workspace-documentation',
+    title: 'References',
+    description: 'Implementation docs (149 files)',
+    details: '→ Architecture diagrams, verification reports, guides\n→ Start here if: Looking for specific implementation examples',
+    setupTime: '⏱️ Variable',
+    link: '/workspace-documentation',
   },
 ];
 
@@ -57,7 +65,6 @@ function ProjectCard({name, title, description, details, setupTime, link}: {
   return (
     <Link
       to={link}
-      target="_self"
       className="card"
       style={{
         display: 'block',
@@ -197,7 +204,7 @@ export default function Home(): React.JSX.Element {
           </div>
 
           <p style={{marginTop: '1.5rem', marginBottom: 0, color: 'var(--ifm-color-emphasis-900)'}}>
-            <Link to="/architecture" style={{fontWeight: 'bold'}} target="_self">
+            <Link to="/architecture" style={{fontWeight: 'bold'}}>
               View Complete Architecture Documentation →
             </Link>
           </p>
@@ -214,7 +221,7 @@ export default function Home(): React.JSX.Element {
               <p><strong>Best for:</strong> Building AI chat interfaces, working with React/Next.js</p>
               <p><strong>What you'll build:</strong> A working AI chat interface with multiple models</p>
               <p><strong>Prerequisites:</strong> Node.js 18.17+, Supabase account (free tier), Basic React/TypeScript knowledge</p>
-              <Link to="/wish-x" style={{fontWeight: 'bold'}} target="_self">Start here: wish-x Quick Start →</Link>
+              <Link to="/wish-x" style={{fontWeight: 'bold'}}>Start here: wish-x Quick Start →</Link>
             </div>
 
             <div style={{padding: '1.5rem', borderRadius: '8px', border: '2px solid var(--ifm-color-primary)', background: 'var(--ifm-color-primary-lightest)'}}>
@@ -222,7 +229,7 @@ export default function Home(): React.JSX.Element {
               <p><strong>Best for:</strong> AI task orchestration, background job processing</p>
               <p><strong>What you'll build:</strong> Background AI task processing system</p>
               <p><strong>Prerequisites:</strong> Node.js 18.17+, Trigger.dev account (free tier), Basic API development experience</p>
-              <Link to="/wish-backend-x" style={{fontWeight: 'bold'}} target="_self">Start here: wish-backend-x Quick Start →</Link>
+              <Link to="/wish-backend-x" style={{fontWeight: 'bold'}}>Start here: wish-backend-x Quick Start →</Link>
             </div>
 
             <div style={{padding: '1.5rem', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)'}}>
@@ -236,7 +243,7 @@ export default function Home(): React.JSX.Element {
               <h3 style={{marginTop: 0}}>Path 4: Just Browsing (5-10 minutes)</h3>
               <p><strong>Best for:</strong> Understanding architecture and capabilities</p>
               <p><strong>Quick tour:</strong> Review project descriptions below</p>
-              <Link to="/workspace-claude-files" style={{fontWeight: 'bold'}} target="_self">Start here: workspace-claude-files (Development Guidelines) →</Link>
+              <Link to="/workspace-claude-files" style={{fontWeight: 'bold'}}>Start here: workspace-claude-files (Development Guidelines) →</Link>
             </div>
           </div>
         </div>
